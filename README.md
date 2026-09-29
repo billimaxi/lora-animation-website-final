@@ -24,3 +24,6 @@ Includes Home, Services, Plans, Our Work, Founder, Contact, and founder portrait
 - Billing: Monthly
 
 The footer social links are represented by clickable Instagram, TikTok, YouTube, and LinkedIn icons. LinkedIn points to the founder profile supplied for the website. The homepage also includes an automatic rotating motion showcase and subtle animated hero graphics.
+
+
+Hero stock photo: “Team Collaboration in Modern Office Setting” by Ninthgrid on Pexels (Lagos, Nigeria), photo 30688909. Pexels lists the image as free to use. The hero loads the optimized image from images.pexels.com.
