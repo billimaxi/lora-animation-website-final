@@ -27,3 +27,20 @@ if(motionSlides.length){
     if(motionDots[motionIndex]) motionDots[motionIndex].classList.add("active");
   },3500);
 }
+
+// Hero reel: alternate featured videos every five seconds.
+const heroSlides=[...document.querySelectorAll('.hero-slide')];
+if(heroSlides.length>1){
+  let heroIndex=0;
+  const title=document.getElementById('hero-slide-title');
+  const count=document.querySelector('.hero-slide-count');
+  function showHeroSlide(next){
+    heroIndex=(next+heroSlides.length)%heroSlides.length;
+    heroSlides.forEach((slide,i)=>slide.classList.toggle('active',i===heroIndex));
+    if(title) title.textContent=heroSlides[heroIndex].dataset.title;
+    if(count) count.textContent=`0${heroIndex+1} / 0${heroSlides.length}`;
+  }
+  document.querySelector('.hero-next')?.addEventListener('click',()=>showHeroSlide(heroIndex+1));
+  document.querySelector('.hero-prev')?.addEventListener('click',()=>showHeroSlide(heroIndex-1));
+  setInterval(()=>showHeroSlide(heroIndex+1),5000);
+}
