@@ -89,3 +89,44 @@ assistantAnswer?.addEventListener('click', event => {
     if(target){target.setAttribute('tabindex', '-1');target.focus();}
   }
 });
+
+// AI & Tech news ticker. Headlines are loaded from a Netlify server-side RSS proxy;
+// no unverified or invented "latest" headlines are presented.
+(() => {
+  const bar = document.getElementById('lora-news-ticker');
+  if (!bar) return;
+  const title = document.getElementById('news-headline');
+  const source = document.getElementById('news-source');
+  const previous = document.getElementById('news-prev');
+  const next = document.getElementById('news-next');
+  const close = document.getElementById('news-close');
+  let headlines = [];
+  let current = 0;
+  let rotation;
+  if (sessionStorage.getItem('lora-news-hidden') === '1') { bar.hidden = true; return; }
+  function show(index) {
+    if (!headlines.length) return;
+    current = (index + headlines.length) % headlines.length;
+    const story = headlines[current];
+    title.textContent = story.title + ' ↗';
+    title.href = story.url;
+    source.textContent = story.source;
+  }
+  function rotate() {
+    if (rotation) clearInterval(rotation);
+    if (headlines.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      rotation = setInterval(() => show(current + 1), 8500);
+    }
+  }
+  previous?.addEventListener('click', () => { show(current - 1); rotate(); });
+  next?.addEventListener('click', () => { show(current + 1); rotate(); });
+  close?.addEventListener('click', () => { bar.hidden = true; clearInterval(rotation); sessionStorage.setItem('lora-news-hidden','1'); });
+  fetch('/.netlify/functions/tech-news', {headers:{Accept:'application/json'}, signal:AbortSignal.timeout(9000)})
+    .then(response => {if (!response.ok) throw new Error('News feed unavailable');return response.json();})
+    .then(data => {
+      if (!Array.isArray(data.items)) return;
+      headlines = data.items.filter(item => item && typeof item.title === 'string' && /^https:\/\//.test(item.url) && typeof item.source === 'string').slice(0,12);
+      if(headlines.length) { show(0); rotate(); }
+    })
+    .catch(() => {source.textContent = 'AI & TECH'; /* Keep the explicit topic link as a graceful fallback. */});
+})();

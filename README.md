@@ -50,3 +50,6 @@ cannot accept submissions. Do not enter card details in the inquiry form.
 - Check YouTube playback and Google Fonts with browser network access.
 - Deployment, payment setup and real form delivery require separate review; a pull
   request does not publish the website.
+
+## Homepage and AI/Tech News ticker
+The homepage retains all three subscription cards and the full selected-projects portfolio, while navigation links still point to dedicated pages. The fixed bottom news bar reads public RSS through the Netlify function at `/.netlify/functions/tech-news` (TechCrunch AI and The Verge). If the external feeds are unavailable, it displays an explicitly labeled topic link; never fabricated headlines. The bar can be closed per browser tab/session. Review production function logs and headline linking after deploy. External RSS availability cannot be guaranteed.

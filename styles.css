@@ -70,3 +70,28 @@ form .consent input{width:18px;height:18px;flex:none;accent-color:#dcb25d}
 nav a[aria-current="page"]{color:#e9bd65;font-weight:700}
 .plans-grid .subscribe{margin-top:24px}
 @media(max-width:800px){.inner-page>.section,.inner-page>.plans .section{padding-top:65px;padding-bottom:65px}}
+
+/* Bottom news bar stays visible without covering the site's important controls */
+body:has(.lora-news-ticker:not([hidden])){padding-bottom:68px}
+.lora-news-ticker{position:fixed;left:0;right:0;bottom:0;z-index:18;min-height:62px;background:#1c1b16;border-top:1px solid #dcb25d66;box-shadow:0 -4px 22px #0009;display:flex;align-items:center;gap:18px;padding:10px max(4%,18px);font-size:12px}
+.lora-news-ticker[hidden]{display:none}
+.news-label{color:#e9bd65;font:800 11px Manrope;white-space:nowrap;letter-spacing:.055em}
+.news-dot{display:inline-block;background:#dcb25d;border-radius:50%;width:7px;height:7px;margin-right:5px}
+.news-content{display:flex;align-items:baseline;gap:12px;flex:1;min-width:0}
+.news-source{color:#dcb25d;font-size:10px;white-space:nowrap}
+.news-content a{color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.news-content a:hover{text-decoration:underline;color:#e9bd65}
+.news-controls{display:flex;gap:6px}
+.news-controls button{height:30px;min-width:30px;background:#29271f;border:1px solid #dcb25d55;color:#e9bd65;cursor:pointer;font-size:18px}
+.news-controls button:focus-visible{outline:2px solid #f0ca79}
+body:has(.lora-news-ticker:not([hidden])) .assistant-toggle{bottom:82px}
+body:has(.lora-news-ticker:not([hidden])) .assistant-panel{bottom:150px}
+@media(max-width:640px){
+ .lora-news-ticker{padding:9px 10px;gap:9px;min-height:62px}
+ .news-label{font-size:9px}.news-content{display:block}
+ .news-source{display:block;font-size:9px}
+ .news-content a{font-size:11px}
+ .news-controls{gap:2px}.news-controls button{min-width:27px}
+ body:has(.lora-news-ticker:not([hidden])) .assistant-toggle{bottom:80px}
+ body:has(.lora-news-ticker:not([hidden])) .assistant-panel{bottom:140px;max-height:calc(100dvh - 165px)}
+}
