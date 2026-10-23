@@ -33,3 +33,32 @@
 .hero-video .hero-photo-badge{align-items:center;pointer-events:none}
 .hero-video .hero-photo-badge span{font-size:10px}
 .hero-slideshow{display:block}.hero-slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .6s ease}.hero-slide.active{opacity:1;visibility:visible;z-index:0}.hero-slide iframe{width:100%;height:100%;border:0;object-fit:cover;pointer-events:none}.hero-slide .slide-link{position:absolute;inset:0;z-index:2}.hero-slideshow .hero-photo-shade{z-index:3}.hero-slideshow:after{z-index:4}.hero-slideshow .hero-photo-badge{z-index:5}.hero-slide-controls{position:absolute;right:24px;bottom:18px;z-index:6;display:flex;align-items:center;gap:10px}.hero-slide-controls button{width:30px;height:30px;border:1px solid #dcb25d88;background:#10110fcc;color:#fff;font-size:20px;cursor:pointer}.hero-slide-count{font-size:9px;letter-spacing:.12em;color:#f3e6c9}.hero-photo-badge{right:150px}
+
+/* Learning, inquiries and the local website guide share LORA's existing palette. */
+html{scroll-padding-top:100px}
+:focus-visible{outline:2px solid #f0ca79;outline-offset:4px}
+.guides ol{padding-left:20px;font-size:13px;color:#d5d2ca;line-height:1.8}
+.guides li{padding:8px 0}.guides li:before{content:none}
+.faq{max-width:1050px}.faq h2{margin-bottom:32px}
+.faq details{border-bottom:1px solid #ffffff24;padding:20px 0}
+.faq summary{cursor:pointer;font:600 17px Manrope;line-height:1.5;padding:5px 0}
+.faq details p{color:#b8b7b0;max-width:800px;font-size:14px;line-height:1.8}
+.faq a{color:#e9bd65;text-decoration:underline}
+form label{display:flex;flex-direction:column;gap:8px}
+form input,form select,form textarea{width:100%;min-width:0;box-sizing:border-box;font-size:16px}
+form textarea{resize:vertical}form .form-help{font-size:12px;color:#b8b7b0;line-height:1.6}
+form .consent{flex-direction:row;align-items:flex-start;line-height:1.6;font-size:12px;gap:10px}
+form .consent input{width:18px;height:18px;flex:none;accent-color:#dcb25d}
+.assistant-toggle{position:fixed;right:24px;bottom:24px;z-index:20;border:1px solid #e9bd65;background:#dcb25d;color:#15130e;padding:15px 20px;font:700 14px Manrope;cursor:pointer;box-shadow:0 6px 25px #0006}
+.assistant-panel{position:fixed;right:24px;bottom:90px;width:360px;max-width:calc(100vw - 32px);max-height:calc(100dvh - 120px);overflow:auto;z-index:21;background:#181916;color:#eee;border:1px solid #dcb25d;padding:22px;box-sizing:border-box;box-shadow:0 12px 40px #0009}
+.assistant-panel[hidden]{display:none}.assistant-header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.assistant-header h2{font:700 19px Manrope;letter-spacing:0}
+.assistant-close{background:transparent;border:1px solid #ffffff44;color:white;font-size:24px;min-width:44px;min-height:44px;cursor:pointer}
+.assistant-panel p{font-size:14px;line-height:1.7}.assistant-panel .assistant-disclosure{font-size:12px;color:#b8b7b0;border-bottom:1px solid #ffffff24;padding-bottom:14px}
+.assistant-panel a{color:#e9bd65;text-decoration:underline}.assistant-topics{display:grid;gap:8px;margin-top:18px}
+.assistant-topics button{border:1px solid #dcb25d88;background:#10110f;color:#e9bd65;padding:12px;text-align:left;cursor:pointer;font:600 13px Manrope}
+.assistant-topics button:hover{background:#29251c}footer{padding-bottom:100px}
+@media(min-width:801px){header{gap:18px}nav{gap:16px}}
+@media(max-width:1100px) and (min-width:801px){header{padding:0 3%}nav{gap:10px}nav a{font-size:11px}}
+@media(max-width:800px){.assistant-toggle{right:16px;bottom:16px}.assistant-panel{right:16px;bottom:80px}.plans-grid .subscribe{padding:15px 12px}.guides ol{font-size:14px}nav a{padding:8px 0}.navbtn{padding:10px 16px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

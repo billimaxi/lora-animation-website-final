@@ -11,7 +11,7 @@ Responsive static website for GitHub + Netlify.
 
 ## Before launch
 - Dee's Bite is shown as a client project with a designed preview card and WhatsApp request link. Upload the commercial to YouTube (unlisted is fine) or another host to make it playable on-site. Avoid committing the large original video to GitHub.
-- Plans are custom-quote service levels, not automatic paid subscriptions. Confirm scope, deliverables, revisions, schedule and price in each proposal.
+- Subscription buttons open the supplied Flutterwave checkouts. Confirm each checkout's USD amount, monthly billing configuration, cancellation/refund terms and business ownership before launch; recurring billing is configured in Flutterwave, not this repository. Confirm creative scope with each client before work begins.
 - Facebook is intentionally omitted for now.
 - Check the YouTube links and social handles before publishing.
 
@@ -27,3 +27,26 @@ The footer social links are represented by clickable Instagram, TikTok, YouTube,
 
 
 Hero stock photo: “Team Collaboration in Modern Office Setting” by Ninthgrid on Pexels (Lagos, Nigeria), photo 30688909. Pexels lists the image as free to use. The hero loads the optimized image from images.pexels.com.
+
+
+## Local development and review
+Serve the repository root with `python3 -m http.server 8000 --bind 0.0.0.0`.
+There is no build step or runtime dependency installation. The website guide uses
+preset responses in `script.js`; it is explicitly rule-based and makes no API calls
+or chat storage requests. No API keys are required.
+
+The inquiry form retains `name="lora-contact"`, POST, `data-netlify="true"`,
+`form-name`, the `bot-field` honeypot and `/success.html` redirect. New fields are
+statically present for Netlify form detection. After an approved deployment,
+verify form detection and a real submission in Netlify; a local static server
+cannot accept submissions. Do not enter card details in the inquiry form.
+
+### Review checks
+- Verify each plan's Subscribe button opens the assigned Flutterwave URL in a new tab.
+  Do not complete a payment during testing.
+- Exercise the guide topics, close button, Escape, and links back to page sections.
+- Check FAQ keyboard expansion, required form fields, email validation and plan prefills.
+- Check mobile menu, hero controls and page overflow at mobile and desktop widths.
+- Check YouTube playback and Google Fonts with browser network access.
+- Deployment, payment setup and real form delivery require separate review; a pull
+  request does not publish the website.
