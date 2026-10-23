@@ -62,3 +62,11 @@ form .consent input{width:18px;height:18px;flex:none;accent-color:#dcb25d}
 @media(max-width:1100px) and (min-width:801px){header{padding:0 3%}nav{gap:10px}nav a{font-size:11px}}
 @media(max-width:800px){.assistant-toggle{right:16px;bottom:16px}.assistant-panel{right:16px;bottom:80px}.plans-grid .subscribe{padding:15px 12px}.guides ol{font-size:14px}nav a{padding:8px 0}.navbtn{padding:10px 16px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Multiple dedicated, directly addressable website pages */
+.inner-page{min-height:calc(100vh - 250px)}
+.inner-page>.section,.inner-page>.plans .section{padding-top:90px;padding-bottom:90px}
+.inner-page>.founder{min-height:68vh}
+nav a[aria-current="page"]{color:#e9bd65;font-weight:700}
+.plans-grid .subscribe{margin-top:24px}
+@media(max-width:800px){.inner-page>.section,.inner-page>.plans .section{padding-top:65px;padding-bottom:65px}}

@@ -1,12 +1,12 @@
 const menu=document.querySelector(".menu-toggle"),nav=document.querySelector("nav");
-menu.addEventListener("click",()=>{
+menu?.addEventListener("click",()=>{
   menu.setAttribute("aria-expanded", String(nav.classList.toggle("open")));
 });
-nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{
+nav?.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{
   nav.classList.remove("open");
   menu.setAttribute("aria-expanded", "false");
 }));
-document.getElementById("year").textContent=new Date().getFullYear();
+if(document.getElementById("year")) document.getElementById("year").textContent=new Date().getFullYear();
 
 document.querySelectorAll("[data-plan]").forEach(a=>a.addEventListener("click",()=>{
   const interest=document.getElementById("interest");
@@ -58,11 +58,11 @@ const assistantPanel = document.getElementById('lora-assistant');
 const assistantClose = document.querySelector('.assistant-close');
 const assistantAnswer = document.getElementById('assistant-answer');
 const assistantTopics = {
-  services: '<p>LORA creates launch visuals, sales and promotional content, brand stories, music-video visuals and cultural animation.</p><a href="#services">Explore services →</a>',
-  plans: '<p>Essential: $150 USD/month, 4 AI videos per month. Growth: $250 USD/month, 3 per week (up to 12/month). Studio Retainer: $500 USD/month, 4 per week (up to 16/month). Agree length, revisions and scheduling with LORA before subscribing.</p><a href="#plans">Compare packages and subscription options →</a>',
-  brief: '<p>Share your audience, goal, video formats, brand assets, reference links, budget and deadline. You do not need a finished script to start.</p><a href="#learn">Read the beginner guides →</a>',
-  payments: '<p>Subscription buttons open Flutterwave. Review its billing terms before paying. For cancellations, changes or payment issues, contact LORA with your transaction reference. This guide cannot access accounts, take payments or cancel subscriptions.</p><a href="#faq">Read payment and cancellation FAQs →</a>',
-  contact: '<p>Ready to discuss a project? Send a brief or contact the team directly. Never share passwords or card details.</p><a href="#contact">Project inquiry form →</a><p><a href="mailto:info@loraanimations.online">Email LORA</a> · <a href="https://wa.me/2349048200012" target="_blank" rel="noopener noreferrer">WhatsApp LORA ↗</a></p>'
+  services: '<p>LORA creates launch visuals, sales and promotional content, brand stories, music-video visuals and cultural animation.</p><a href="/services/">Explore services →</a>',
+  plans: '<p>Essential: $150 USD/month, 4 AI videos per month. Growth: $250 USD/month, 3 per week (up to 12/month). Studio Retainer: $500 USD/month, 4 per week (up to 16/month). Agree length, revisions and scheduling with LORA before subscribing.</p><a href="/plans/">Compare packages and subscription options →</a>',
+  brief: '<p>Share your audience, goal, video formats, brand assets, reference links, budget and deadline. You do not need a finished script to start.</p><a href="/guides/">Read the beginner guides →</a>',
+  payments: '<p>Subscription buttons open Flutterwave. Review its billing terms before paying. For cancellations, changes or payment issues, contact LORA with your transaction reference. This guide cannot access accounts, take payments or cancel subscriptions.</p><a href="/faq/">Read payment and cancellation FAQs →</a>',
+  contact: '<p>Ready to discuss a project? Send a brief or contact the team directly. Never share passwords or card details.</p><a href="/contact/">Project inquiry form →</a><p><a href="mailto:info@loraanimations.online">Email LORA</a> · <a href="https://wa.me/2349048200012" target="_blank" rel="noopener noreferrer">WhatsApp LORA ↗</a></p>'
 };
 function setAssistantOpen(open) {
   assistantPanel.hidden = !open;
@@ -70,23 +70,22 @@ function setAssistantOpen(open) {
   if (open) assistantClose.focus();
   else assistantToggle.focus();
 }
-assistantToggle.addEventListener('click', () => setAssistantOpen(assistantPanel.hidden));
-assistantClose.addEventListener('click', () => setAssistantOpen(false));
-assistantPanel.addEventListener('keydown', event => {
+assistantToggle?.addEventListener('click', () => setAssistantOpen(assistantPanel.hidden));
+assistantClose?.addEventListener('click', () => setAssistantOpen(false));
+assistantPanel?.addEventListener('keydown', event => {
   if (event.key === 'Escape') setAssistantOpen(false);
 });
-assistantPanel.querySelectorAll('[data-topic]').forEach(button => {
+assistantPanel?.querySelectorAll('[data-topic]').forEach(button => {
   button.addEventListener('click', () => {
     // Only author-controlled templates are rendered; no visitor input is interpolated.
     assistantAnswer.innerHTML = assistantTopics[button.dataset.topic];
   });
 });
-assistantAnswer.addEventListener('click', event => {
+assistantAnswer?.addEventListener('click', event => {
   const link = event.target.closest('a[href^="#"]');
   if (link) {
     setAssistantOpen(false);
     const target = document.querySelector(link.getAttribute('href'));
-    target.setAttribute('tabindex', '-1');
-    target.focus();
+    if(target){target.setAttribute('tabindex', '-1');target.focus();}
   }
 });
