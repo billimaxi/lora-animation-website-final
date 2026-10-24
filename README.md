@@ -100,3 +100,11 @@ CDNs. Feed URLs and availability are outside this site's control.
 locked dependencies; no API-key setup or static build command is required. This
 branch does not authorize a deploy or a merge. Verify the function response on an
 approved deployment before claiming live-news availability.
+
+
+## Form submission troubleshooting (deploy previews)
+1. In Netlify, open **Forms → Form detection** and verify detection is **enabled**. If you enabled it now, trigger a **new deploy**; it does not apply retroactively.
+2. After the deploy completes, confirm that Netlify lists the **lora-contact** form under **Forms → Active forms**. If it is absent, the form is NOT registered, and browser submissions cannot be trusted.
+3. The contact form is statically present in `contact/index.html` with `data-netlify="true"`, `name="lora-contact"`, matching `form-name`, and a honeypot. The client submits URL-encoded data via POST to `/`, a static route, and now shows errors inline instead of redirecting to a 404.
+4. Retry a realistic test inquiry, then confirm it is recorded in Netlify's **Forms → lora-contact** verified or spam submissions. Do not claim successful delivery solely because the browser shows a success message.
+5. If detection is enabled and no form appears after a fresh deploy, review the Netlify deploy logs/form post-processing and support guide; this requires access to the Netlify dashboard.

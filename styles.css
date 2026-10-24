@@ -104,3 +104,10 @@ nav a[aria-current="page"]{color:#e9bd65;font-weight:700}
 @media(prefers-reduced-motion:reduce){.news-slide-enter{animation:none}}
 
 #news-pause{min-width:64px;font:700 12px sans-serif}
+
+/* Netlify form submission feedback, including safe handling of POST errors */
+.form-status{font-size:13px;line-height:1.6;padding:13px 15px;border:1px solid #dcb25d77;background:#282417;color:#f8e5b6;margin-top:14px}
+.form-status[hidden]{display:none}
+.form-status[data-state="error"]{border-color:#c88d7c;background:#39221c;color:#ffded2}
+.form-status[data-state="success"]{border-color:#88b38b;background:#1d3025;color:#d2f4d6}
+form button:disabled{cursor:wait;opacity:.7}

@@ -90,6 +90,52 @@ assistantAnswer?.addEventListener('click', event => {
   }
 });
 
+
+// Reliable Netlify Forms submission: POST URL-encoded data to an existing static path.
+// Show success/error on the same page so failed form processing never navigates to a 404.
+// This still requires Form detection to be enabled in Netlify before deploying.
+(() => {
+  const form = document.querySelector('form[name="lora-contact"]');
+  if (!form) return;
+  const status = document.getElementById('lora-form-status');
+  const submit = form.querySelector('button[type="submit"]');
+  if (!status || !submit) return;
+  const originalLabel = submit.textContent;
+  let sending = false;
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (sending || !form.reportValidity()) return;
+    sending = true;
+    submit.disabled = true;
+    submit.textContent = 'Sending inquiry…';
+    status.hidden = false;
+    status.dataset.state = 'pending';
+    status.textContent = 'Sending your inquiry securely…';
+    try {
+      const data = new URLSearchParams(new FormData(form));
+      // The form-name field identifies the registered Netlify form.
+      if (data.get('form-name') !== 'lora-contact') throw new Error('Missing form name');
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: data.toString()
+      });
+      if (!response.ok) throw new Error('Netlify form submission failed');
+      status.dataset.state = 'success';
+      status.textContent = 'Thank you! Your inquiry has been submitted. LORA will contact you using the details you provided.';
+      form.reset();
+      // Netlify stores the actual submission; the frontend stores no details.
+    } catch (error) {
+      status.dataset.state = 'error';
+      status.textContent = 'We could not send your inquiry through this form. Your details are still here. Please email info@loraanimations.online or WhatsApp +234 904 820 0012 instead.';
+    } finally {
+      sending = false;
+      submit.disabled = false;
+      submit.textContent = originalLabel;
+    }
+  });
+})();
+
 // LORA Tech Radar: server-fetched articles; explicitly labeled publisher links on failure.
 (() => {
  const root = document.getElementById('lora-news-ticker');
