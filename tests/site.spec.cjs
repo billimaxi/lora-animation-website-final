@@ -26,9 +26,8 @@ const { chromium } = require('playwright');
       assert.equal(await card.locator('.subscribe').getAttribute('href'), `https://flutterwave.com/pay/${slug}`);
       assert.equal(await card.locator('.subscribe').getAttribute('target'), '_blank');
       assert.ok((await card.locator('.subscribe').getAttribute('rel')).includes('noopener'));
-      await card.locator('[data-plan]').click();
-      assert.ok((await page.locator('#interest').inputValue()).startsWith(plan));
     }
+    await page.goto('http://127.0.0.1:8000/contact/');
     const form = page.locator('form[name="lora-contact"]');
     for (const [attribute, value] of Object.entries({ method: 'POST', 'data-netlify': 'true', 'netlify-honeypot': 'bot-field', action: '/success.html' })) {
       assert.equal(await form.getAttribute(attribute), value);
@@ -40,11 +39,14 @@ const { chromium } = require('playwright');
     await form.locator('[name="email"]').fill('invalid');
     assert.equal(await form.locator('[name="email"]').evaluate(el => el.checkValidity()), false);
     await form.locator('[name="email"]').fill('review@example.com');
+    await form.locator('[name="interest"]').selectOption({ label: 'Launch Visuals' });
     await form.locator('[name="message"]').fill('A vertical launch video for our new product.');
     assert.equal(await form.evaluate(el => el.checkValidity()), false); // Consent required.
     await form.locator('[name="contact-consent"]').check();
     assert.equal(await form.evaluate(el => el.checkValidity()), true);
+    await page.goto('http://127.0.0.1:8000/guides/');
     assert.equal(await page.locator('#learn article').count(), 3);
+    await page.goto('http://127.0.0.1:8000/faq/');
     await page.locator('#faq summary').first().focus();
     await page.keyboard.press('Enter');
     assert.equal(await page.locator('#faq details').first().getAttribute('open'), '');
@@ -65,13 +67,15 @@ const { chromium } = require('playwright');
     }
     await page.locator('.menu-toggle').click();
     assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'true');
-    await page.locator('nav a[href="#learn"]').click();
+    await page.locator('nav a[href="/guides/"]').click();
     assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'false');
     await page.locator('.assistant-toggle').click();
     await page.locator('[data-topic="plans"]').click();
     await page.locator('#assistant-answer a').click();
     assert.equal(await page.locator('#lora-assistant').isVisible(), false);
-    assert.equal(await page.locator('#plans').evaluate(el => el === document.activeElement), true);
+    await page.waitForURL('**/plans/');
+    assert.equal(await page.locator('#plans').count(), 1);
+    await page.goto('http://127.0.0.1:8000/');
     const title = await page.locator('#hero-slide-title').textContent();
     await page.locator('.hero-next').click();
     assert.notEqual(await page.locator('#hero-slide-title').textContent(), title);
@@ -84,6 +88,6 @@ const { chromium } = require('playwright');
     await page.setViewportSize({ width: 390, height: 844 });
     await page.screenshot({ path: '/tmp/lora-mobile.png', fullPage: true });
     assert.deepEqual(errors, []);
-    console.log('PASS: payment mappings; Netlify contract and form validation; guides and keyboard FAQ; assistant topics, focus and dismissal; six viewport widths; mobile navigation; carousel; local assets. No runtime errors.');
+    console.log('PASS: payment mappings on homepage; Netlify contract and form validation; guides and keyboard FAQ; assistant topics, focus and dismissal; six viewport widths; mobile navigation; carousel; local assets. No runtime errors.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

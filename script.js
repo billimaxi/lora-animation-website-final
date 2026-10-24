@@ -90,64 +90,99 @@ assistantAnswer?.addEventListener('click', event => {
   }
 });
 
-// LORA Tech Radar: visible carousel. Rotates source-discovery slides even when
-// publisher RSS feeds are blocked or temporarily unavailable. Never invent headlines.
+// LORA Tech Radar: server-fetched articles; explicitly labeled publisher links on failure.
 (() => {
- const root=document.getElementById('lora-news-ticker');
- if(!root)return;
- const title=document.getElementById('news-headline'),read=document.getElementById('news-read');
- const source=document.getElementById('news-source'),count=document.getElementById('news-count');
- const state=document.getElementById('news-state'),status=document.getElementById('news-status');
- const progress=document.getElementById('news-progress');
- const previous=document.getElementById('news-prev'),next=document.getElementById('news-next');
- const pause=document.getElementById('news-pause');
- // Explicitly labeled source links, not presented as current headlines.
- const fallback=[
-  {title:'Explore the latest artificial intelligence coverage',url:'https://techcrunch.com/category/artificial-intelligence/',source:'TECHCRUNCH · EXPLORE'},
-  {title:'Discover technology and AI reporting',url:'https://www.theverge.com/ai-artificial-intelligence',source:'THE VERGE · EXPLORE'},
-  {title:'Browse research and science technology stories',url:'https://arstechnica.com/ai/',source:'ARS TECHNICA · EXPLORE'}
+ const root = document.getElementById('lora-news-ticker');
+ if (!root) return;
+ const get = id => document.getElementById(id);
+ const title = get('news-headline'), read = get('news-read'), image = get('news-image');
+ const source = get('news-source'), date = get('news-date'), count = get('news-count');
+ const state = get('news-state'), status = get('news-status'), context = get('news-context');
+ const slide = get('news-slide'), pause = get('news-pause');
+ const fallbackImage = '/assets/tech-radar-fallback.svg';
+ const fallback = [
+  { title: 'Explore artificial intelligence coverage', url: 'https://techcrunch.com/category/artificial-intelligence/', source: 'TechCrunch AI' },
+  { title: 'Discover technology and AI reporting', url: 'https://www.theverge.com/ai-artificial-intelligence', source: 'The Verge' },
+  { title: 'Browse AI research and technology stories', url: 'https://arstechnica.com/ai/', source: 'Ars Technica' }
  ];
- let items=fallback,current=0,paused=false,timer=null;
- const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- function show(n){
-  current=(n+items.length)%items.length;
-  const item=items[current];
-  title.textContent=item.title+' ↗';title.href=item.url;
-  read.href=item.url; source.textContent=item.source;
-  count.textContent=String(current+1).padStart(2,'0')+' / '+String(items.length).padStart(2,'0');
-  root.classList.remove('news-slide-enter');void root.offsetWidth;root.classList.add('news-slide-enter');
-  if(progress){progress.style.animation='none';void progress.offsetWidth;progress.style.animation=(!paused&&!reduceMotion)?'loraNewsProgress 7s linear forwards':'none';}
+ const safeUrl = value => {
+  try {
+   const url = new URL(value);
+   return url.protocol === 'https:' && !url.username && !url.password ? url.href : null;
+  } catch { return null; }
+ };
+ let items = fallback, current = 0, live = false, timer = null;
+ let paused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ let hovering = false, focused = false;
+ function canRotate() { return !paused && !hovering && !focused && !document.hidden && items.length > 1; }
+ function schedule() {
+  clearTimeout(timer);
+  timer = canRotate() ? setTimeout(() => { show(current + 1); schedule(); }, 7000) : null;
+  pause.textContent = paused ? 'Play' : 'Pause';
+  pause.setAttribute('aria-pressed', String(paused));
+  pause.setAttribute('aria-label', paused ? 'Play news slideshow' : 'Pause news slideshow');
+  slide.setAttribute('aria-live', canRotate() ? 'off' : 'polite');
+  status.textContent = (live ? 'Publisher headlines' : 'Live feed unavailable · Curated publisher links') +
+   (canRotate() ? ' · Rotating every 7 seconds' : ' · Slideshow paused');
  }
- function schedule(){
-  if(timer)clearInterval(timer);
-  if(!paused&&!reduceMotion&&items.length>1) timer=setInterval(()=>show(current+1),7000);
+ function show(index) {
+  current = (index + items.length) % items.length;
+  const item = items[current];
+  title.textContent = item.title;
+  title.href = read.href = item.url;
+  source.textContent = item.source;
+  read.textContent = live ? 'Read Story ↗' : 'Explore publisher ↗';
+  read.setAttribute('aria-label', (live ? 'Read story: ' : 'Explore publisher: ') + item.title + ' (opens in a new tab)');
+  context.textContent = live ? 'Reporting from ' + item.source + '. Read the full story on the original publisher’s website.' :
+   'A curated publisher link, not a live headline. Browse the source’s latest reporting.';
+  const published = item.date && new Date(item.date);
+  date.hidden = !published || !Number.isFinite(published.getTime());
+  if (!date.hidden) {
+   date.dateTime = published.toISOString();
+   date.textContent = published.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+  } else { date.removeAttribute('datetime'); date.textContent = ''; }
+  image.alt = live && item.image ? 'Article image from ' + item.source + ': ' + item.title : 'LORA Tech Radar — AI and technology';
+  image.src = live && item.image ? item.image : fallbackImage;
+  count.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(items.length).padStart(2, '0');
+  slide.setAttribute('aria-label', (current + 1) + ' of ' + items.length);
+  slide.classList.remove('news-slide-enter');
+  void slide.offsetWidth;
+  slide.classList.add('news-slide-enter');
  }
- previous?.addEventListener('click',()=>{show(current-1);schedule();});
- next?.addEventListener('click',()=>{show(current+1);schedule();});
- pause?.addEventListener('click',()=>{
-  paused=!paused;pause.textContent=paused?'▶':'Ⅱ';
-  pause.setAttribute('aria-pressed',String(paused));
-  pause.setAttribute('aria-label',paused?'Play news slideshow':'Pause news slideshow');
-  status.textContent=paused?'Slideshow paused':(state.dataset.live?'Fresh publisher headlines':'Explore technology sources');
-  show(current);schedule();
+ image.addEventListener('error', () => {
+  // No retry loop if the local fallback itself is unavailable.
+  if (image.getAttribute('src') !== fallbackImage) {
+   image.alt = 'LORA Tech Radar — AI and technology';
+   image.src = fallbackImage;
+  }
  });
- root.addEventListener('mouseenter',()=>{if(timer)clearInterval(timer);});
- root.addEventListener('mouseleave',schedule);
- root.addEventListener('focusin',()=>{if(timer)clearInterval(timer);});
- root.addEventListener('focusout',e=>{if(!root.contains(e.relatedTarget))schedule();});
- // Show useful rotating links immediately while the RSS function loads.
- show(0);schedule();
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),8000);
- fetch('/.netlify/functions/tech-news',{headers:{Accept:'application/json'},signal:controller.signal})
-  .then(r=>{if(!r.ok)throw new Error('Feed unavailable');return r.json();})
-  .then(data=>{
-   if(!Array.isArray(data.items))return;
-   const fresh=data.items.filter(item=>item&&typeof item.title==='string'&&item.title.length>8&&/^https:\/\//.test(item.url)&&typeof item.source==='string').slice(0,12);
-   if(!fresh.length)return;
-   items=fresh;current=0;state.textContent='PUBLISHER HEADLINES';state.dataset.live='1';
-   status.textContent='Headlines from external publishers · Open original story';
-   show(0);schedule();
-  }).catch(()=>{state.textContent='EXPLORE TECH NEWS';status.textContent='Live feed temporarily unavailable · Browse publisher links';})
-  .finally(()=>clearTimeout(timeout));
+ get('news-prev').addEventListener('click', () => { show(current - 1); schedule(); });
+ get('news-next').addEventListener('click', () => { show(current + 1); schedule(); });
+ pause.addEventListener('click', () => {
+  paused = !paused;
+  // Explicit Play can start rotation while this button retains keyboard focus.
+  if (!paused) focused = hovering = false;
+  schedule();
+ });
+ root.addEventListener('mouseenter', () => { hovering = true; schedule(); });
+ root.addEventListener('mouseleave', () => { hovering = false; schedule(); });
+ root.addEventListener('focusin', () => { focused = true; schedule(); });
+ root.addEventListener('focusout', event => { if (!root.contains(event.relatedTarget)) { focused = false; schedule(); } });
+ document.addEventListener('visibilitychange', schedule);
+ show(0); schedule();
+ const controller = new AbortController();
+ const timeout = setTimeout(() => controller.abort(), 8000);
+ fetch('/.netlify/functions/tech-news', { headers: { Accept: 'application/json' }, signal: controller.signal })
+  .then(response => { if (!response.ok) throw new Error('Feed unavailable'); return response.json(); })
+  .then(data => {
+   if (!Array.isArray(data.items)) return;
+   const fresh = data.items.filter(item => item && typeof item.title === 'string' && item.title.trim() &&
+    safeUrl(item.url) && typeof item.source === 'string' && item.source.trim()).slice(0, 12)
+    .map(item => ({ ...item, url: safeUrl(item.url), image: safeUrl(item.image) }));
+   if (!fresh.length) return;
+   items = fresh; live = true;
+   state.textContent = 'PUBLISHER HEADLINES';
+   show(0); schedule();
+  }).catch(() => { /* The useful, clearly labeled publisher carousel is already displayed. */ })
+  .finally(() => clearTimeout(timeout));
 })();
