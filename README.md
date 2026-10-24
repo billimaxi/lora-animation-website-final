@@ -36,7 +36,7 @@ preset responses in `script.js`; it is explicitly rule-based and makes no API ca
 or chat storage requests. No API keys are required.
 
 The inquiry form retains `name="lora-contact"`, POST, `data-netlify="true"`,
-`form-name`, the `bot-field` honeypot and `/success.html` redirect. New fields are
+`form-name`, the `bot-field` honeypot and an extensionless `/success` redirect (served from `success.html`). New fields are
 statically present for Netlify form detection. After an approved deployment,
 verify form detection and a real submission in Netlify; a local static server
 cannot accept submissions. Do not enter card details in the inquiry form.

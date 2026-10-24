@@ -29,7 +29,7 @@ const { chromium } = require('playwright');
     }
     await page.goto('http://127.0.0.1:8000/contact/');
     const form = page.locator('form[name="lora-contact"]');
-    for (const [attribute, value] of Object.entries({ method: 'POST', 'data-netlify': 'true', 'netlify-honeypot': 'bot-field', action: '/success.html' })) {
+    for (const [attribute, value] of Object.entries({ method: 'POST', 'data-netlify': 'true', 'netlify-honeypot': 'bot-field', action: '/success' })) {
       assert.equal(await form.getAttribute(attribute), value);
     }
     assert.equal(await form.locator('[name="form-name"]').inputValue(), 'lora-contact');
