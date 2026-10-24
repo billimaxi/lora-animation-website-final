@@ -118,3 +118,7 @@ Form detection now uses a single static form blueprint in `/__forms.html` with e
 The on-page LORA Guide remains rule-based. It now displays a human handoff to the LORA business WhatsApp number, with no data silently transferred. If the site owner later connects Tidio by installing their unique official widget code, the same handoff detects the ready Tidio API and opens its live chat. We have not installed Tidio or claimed that a human is currently online. Avoid a second overlapping chat launcher; position or hide the Tidio bubble using its settings. The guide has no chat transcript to transfer.
 
 To remove the Powered by Netlify badge for everyone: Netlify Project configuration > General > Powered by Netlify badge > Off. This badge is injected by Netlify, not present in our source. No redeploy required.
+
+
+## Tidio live chat integration
+The supplied Tidio public widget script is installed on every public HTML page in the About Us + founder review pull request. The existing LORA Guide has one branded launcher and offers human handoff: when Tidio is loaded it opens Tidio chat, hides the vendor's separate launcher before the visitor asks for chat, and hides it again after chat is closed. If the Tidio script is blocked or fails to load, the guide still directs visitors to LORA's WhatsApp number. This is a handoff only: no guide chat transcript is sent. The widget may offer offline messaging when no LORA team members are online. Publish only upon approval.

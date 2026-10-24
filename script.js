@@ -114,8 +114,22 @@ assistantPanel?.querySelectorAll('[data-topic]').forEach(button => {
     if (typeof window.tidioChatApi.show === 'function') window.tidioChatApi.show();
     window.tidioChatApi.open();
   });
-  document.addEventListener('tidioChat-ready', updateHandoff);
-  if (window.tidioChatApi?.on) window.tidioChatApi.on('ready', updateHandoff);
+  // Keep a single floating launcher: the branded LORA Guide.
+  // Tidio is revealed only when visitors explicitly choose live chat.
+  const onTidioReady = () => {
+    if (!tidioIsReady()) return;
+    const api = window.tidioChatApi;
+    if (typeof api.hide === 'function') api.hide();
+    if (typeof api.on === 'function') {
+      api.on('close', () => {
+        if (typeof api.hide === 'function') api.hide();
+      });
+    }
+    updateHandoff();
+  };
+  if (tidioIsReady()) onTidioReady();
+  else if (window.tidioChatApi?.on) window.tidioChatApi.on('ready', onTidioReady);
+  else document.addEventListener('tidioChat-ready', onTidioReady);
   updateHandoff();
 })();
 
