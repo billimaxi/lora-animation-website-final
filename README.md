@@ -112,3 +112,13 @@ approved deployment before claiming live-news availability.
 
 ### Explicit form registration endpoint
 Form detection now uses a single static form blueprint in `/__forms.html` with every field submitted by `/contact/`. The visible form no longer declares a second independent Netlify form. The browser submits to the explicit static endpoint `/__forms.html` instead of `/`, and includes HTTP error details for troubleshooting. **You must enable Netlify Forms detection in the dashboard and deploy again**: source changes alone cannot turn on a disabled site setting. A 404 after that indicates an unregistered form or blocked POST; confirm `lora-contact` is listed in Netlify's Active forms, and review deploy form detection logs. Local tests mock responses; a browser success message does not prove Netlify stored the inquiry.
+
+## Tidio live chat (single chat widget)
+The official Tidio widget is installed once on every public HTML page. The custom LORA Guide has been removed, so Tidio is the only chat launcher. The public widget key is supplied by LORA; the site applies the LORA gold color via the documented widget API. The website does **not** inject its own welcome into Tidio, preventing a duplicate/conflicting greeting.
+
+### Set LORA's welcome and offline replies in Tidio
+In the Tidio account: **Settings > Live Chat > Appearance > Content**. Under **Home**, personalize Header, Message, Online status and Offline status; under **Chat**, customize the **Offline message**. In particular, Tidio's default "Hi there. We are currently offline ..." is a provider-managed offline message, not site copy. Set clear branded wording and do not claim agents are online when offline. Tidio's agent status can be changed from the account panel; keep the widget visible when agents are offline so customers can still leave inquiries. Save the account settings, then test in an incognito/private browser. This dashboard content is **not** editable from GitHub.
+
+If an automatic proactive message is desired when visitors land on the website (instead of only seeing the widget's Home/Chat content), use an optional Tidio Flow in its account. Configure just one welcome method; review Tidio's current flow entitlements.
+
+PR #2 is a review-only change. Existing pricing, About Us, framed founder, Tech Radar and Netlify contact form are unchanged.

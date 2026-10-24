@@ -27,6 +27,26 @@ const { chromium } = require('playwright');
       assert.equal(await card.locator('.subscribe').getAttribute('target'), '_blank');
       assert.ok((await card.locator('.subscribe').getAttribute('rel')).includes('noopener'));
     }
+    // About Us replaces Founder in navigation; the founder stays near the bottom of the homepage.
+    await page.goto('http://127.0.0.1:8000/');
+    assert.equal(await page.locator('nav a[href="/about/"]').textContent(), 'About Us');
+    assert.equal(await page.locator('nav a[href="/founder/"]').count(), 0);
+    assert.equal(await page.locator('main > .founder#founder').count(), 1);
+    assert.equal(await page.locator('#founder .founder-portrait img').getAttribute('src'), '/assets/abala-ibrahim-founder.png');
+    assert.equal(await page.locator('main > section').last().getAttribute('id'), 'founder');
+    for (const width of [1440, 390, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      const portrait = await page.locator('#founder .founder-portrait img').boundingBox();
+      assert.ok(portrait.width <= 285, 'Founder portrait is compact at ' + width);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'No horizontal overflow at ' + width);
+    }
+    await page.goto('http://127.0.0.1:8000/about/');
+    assert.equal((await page.locator('h1').textContent()).includes('Good ideas deserve'), true);
+    assert.equal(await page.locator('nav a[href="/about/"]').getAttribute('aria-current'), 'page');
+    assert.equal(await page.locator('.about-pillars article').count(), 3);
+    assert.equal(await page.locator('a[href="/#founder"]').count(), 1);
+    await page.goto('http://127.0.0.1:8000/founder/');
+    assert.equal(await page.locator('.founder-portrait img').count(), 1);
     await page.goto('http://127.0.0.1:8000/contact/');
     const form = page.locator('form[name="lora-contact"]');
     for (const [attribute, value] of Object.entries({ method: 'POST', 'data-netlify': 'true', 'netlify-honeypot': 'bot-field', action: '/success' })) {
@@ -53,28 +73,15 @@ const { chromium } = require('playwright');
     for (const width of [1440, 1024, 820, 768, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Page overflow at ${width}`);
-      await page.locator('.assistant-toggle').click();
-      assert.equal(await page.locator('.assistant-toggle').getAttribute('aria-expanded'), 'true');
-      for (const topic of ['services', 'plans', 'brief', 'payments', 'contact']) {
-        await page.locator(`[data-topic="${topic}"]`).click();
-        assert.ok((await page.locator('#assistant-answer').innerText()).length > 60);
-      }
-      const bounds = await page.locator('#lora-assistant').boundingBox();
-      assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= width && bounds.y >= 0);
-      await page.keyboard.press('Escape');
-      assert.equal(await page.locator('#lora-assistant').isVisible(), false);
-      assert.equal(await page.locator('.assistant-toggle').evaluate(el => el === document.activeElement), true);
+      assert.equal(await page.locator('.assistant-toggle, #lora-assistant').count(), 0);
+      assert.equal(await page.locator('script[src^="https://code.tidio.co/"]').count(), 1);
     }
     await page.locator('.menu-toggle').click();
     assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'true');
     await page.locator('nav a[href="/guides/"]').click();
     assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'false');
-    await page.locator('.assistant-toggle').click();
-    await page.locator('[data-topic="plans"]').click();
-    await page.locator('#assistant-answer a').click();
-    assert.equal(await page.locator('#lora-assistant').isVisible(), false);
-    await page.waitForURL('**/plans/');
-    assert.equal(await page.locator('#plans').count(), 1);
+    await page.waitForURL('**/guides/');
+    assert.equal(await page.locator('nav a[href="/guides/"][aria-current="page"]').count(), 1);
     await page.goto('http://127.0.0.1:8000/');
     const title = await page.locator('#hero-slide-title').textContent();
     await page.locator('.hero-next').click();
@@ -88,6 +95,6 @@ const { chromium } = require('playwright');
     await page.setViewportSize({ width: 390, height: 844 });
     await page.screenshot({ path: '/tmp/lora-mobile.png', fullPage: true });
     assert.deepEqual(errors, []);
-    console.log('PASS: payment mappings on homepage; Netlify contract and form validation; guides and keyboard FAQ; assistant topics, focus and dismissal; six viewport widths; mobile navigation; carousel; local assets. No runtime errors.');
+    console.log('PASS: payment mappings on homepage; Netlify contract and form validation; guides and keyboard FAQ; Tidio as sole chat widget; six viewport widths; mobile navigation; carousel; local assets. No runtime errors.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

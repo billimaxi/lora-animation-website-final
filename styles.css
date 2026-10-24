@@ -49,18 +49,9 @@ form input,form select,form textarea{width:100%;min-width:0;box-sizing:border-bo
 form textarea{resize:vertical}form .form-help{font-size:12px;color:#b8b7b0;line-height:1.6}
 form .consent{flex-direction:row;align-items:flex-start;line-height:1.6;font-size:12px;gap:10px}
 form .consent input{width:18px;height:18px;flex:none;accent-color:#dcb25d}
-.assistant-toggle{position:fixed;right:24px;bottom:24px;z-index:20;border:1px solid #e9bd65;background:#dcb25d;color:#15130e;padding:15px 20px;font:700 14px Manrope;cursor:pointer;box-shadow:0 6px 25px #0006}
-.assistant-panel{position:fixed;right:24px;bottom:90px;width:360px;max-width:calc(100vw - 32px);max-height:calc(100dvh - 120px);overflow:auto;z-index:21;background:#181916;color:#eee;border:1px solid #dcb25d;padding:22px;box-sizing:border-box;box-shadow:0 12px 40px #0009}
-.assistant-panel[hidden]{display:none}.assistant-header{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.assistant-header h2{font:700 19px Manrope;letter-spacing:0}
-.assistant-close{background:transparent;border:1px solid #ffffff44;color:white;font-size:24px;min-width:44px;min-height:44px;cursor:pointer}
-.assistant-panel p{font-size:14px;line-height:1.7}.assistant-panel .assistant-disclosure{font-size:12px;color:#b8b7b0;border-bottom:1px solid #ffffff24;padding-bottom:14px}
-.assistant-panel a{color:#e9bd65;text-decoration:underline}.assistant-topics{display:grid;gap:8px;margin-top:18px}
-.assistant-topics button{border:1px solid #dcb25d88;background:#10110f;color:#e9bd65;padding:12px;text-align:left;cursor:pointer;font:600 13px Manrope}
-.assistant-topics button:hover{background:#29251c}footer{padding-bottom:100px}
 @media(min-width:801px){header{gap:18px}nav{gap:16px}}
 @media(max-width:1100px) and (min-width:801px){header{padding:0 3%}nav{gap:10px}nav a{font-size:11px}}
-@media(max-width:800px){.assistant-toggle{right:16px;bottom:16px}.assistant-panel{right:16px;bottom:80px}.plans-grid .subscribe{padding:15px 12px}.guides ol{font-size:14px}nav a{padding:8px 0}.navbtn{padding:10px 16px}}
+@media(max-width:800px){.plans-grid .subscribe{padding:15px 12px}.guides ol{font-size:14px}nav a{padding:8px 0}.navbtn{padding:10px 16px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 /* Multiple dedicated, directly addressable website pages */
@@ -111,3 +102,40 @@ nav a[aria-current="page"]{color:#e9bd65;font-weight:700}
 .form-status[data-state="error"]{border-color:#c88d7c;background:#39221c;color:#ffded2}
 .form-status[data-state="success"]{border-color:#88b38b;background:#1d3025;color:#d2f4d6}
 form button:disabled{cursor:wait;opacity:.7}
+
+
+/* About Us page and the restored, elegantly framed homepage founder section. */
+#founder{scroll-margin-top:94px}
+.founder{border-top:1px solid rgba(220,178,93,.16)}
+.founder-inner{grid-template-columns:minmax(215px,300px) minmax(0,1fr);gap:clamp(30px,7vw,95px);max-width:1080px;justify-content:center}
+.founder-portrait{position:relative;margin:0;width:min(100%,285px);padding:9px 9px 0;border:1px solid rgba(220,178,93,.67);border-radius:14px;background:linear-gradient(145deg,#3c3626,#151712 72%);box-shadow:0 18px 55px rgba(0,0,0,.28),inset 0 0 0 3px rgba(255,255,255,.025)}
+.founder-portrait img{display:block;width:100%;height:auto;max-width:100%;max-height:340px;aspect-ratio:4/5;object-fit:cover;object-position:center 30%;border-radius:6px}
+.founder-portrait figcaption{text-align:center;padding:13px 4px 14px;color:#dcb25d;font:700 9px/1.4 Manrope;letter-spacing:.17em}
+.about-intro{padding-top:95px;padding-bottom:95px}
+.about-overview{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:clamp(30px,5vw,88px);align-items:center}
+.about-overview h1{font-size:clamp(40px,5.5vw,78px);line-height:1.07;margin:14px 0 25px;letter-spacing:-.045em}
+.about-overview h1 em,.about-mission h2 em{color:#dcb25d}
+.about-overview .lead{max-width:680px}
+.about-actions{display:flex;align-items:center;flex-wrap:wrap;gap:18px;margin-top:30px}
+.about-actions .plain{margin:0}
+.about-mission{padding:42px 35px;border:1px solid rgba(220,178,93,.38);background:linear-gradient(135deg,#29271e,#141712);border-radius:15px}
+.about-mark{font-size:38px;color:#dcb25d}
+.about-mission h2{font-size:clamp(29px,3vw,45px);line-height:1.16;margin:12px 0 20px}
+.about-mission p:not(.eyebrow){font-size:13px;line-height:1.8;color:#c6c3b8}
+.about-services{background:#191a16;border-top:1px solid rgba(255,255,255,.08)}
+.about-pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.about-pillars article{padding:27px;background:#141612;border:1px solid rgba(255,255,255,.11)}
+.about-pillars article span{color:#dcb25d;font:700 11px Manrope}
+.about-pillars article h3{margin:17px 0 10px}
+.about-pillars article p{color:#b6b5ad;font-size:13px;line-height:1.75}
+.about-founder-link{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px;margin-top:35px;border-top:1px solid rgba(255,255,255,.12);padding-top:28px}
+.about-founder-link p{font-size:13px;color:#bbb8ae;margin:0}
+.about-founder-link .plain{margin:0;color:#e8c076}
+@media(max-width:800px){
+  .founder-inner{grid-template-columns:1fr;gap:25px}
+  .founder-portrait{margin:0 auto;width:min(100%,260px)}
+  .about-overview{grid-template-columns:1fr}
+  .about-mission{padding:27px}
+  .about-pillars{grid-template-columns:1fr}
+  .about-intro{padding-top:65px;padding-bottom:65px}
+}
