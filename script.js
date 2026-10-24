@@ -115,19 +115,22 @@ assistantAnswer?.addEventListener('click', event => {
       const data = new URLSearchParams(new FormData(form));
       // The form-name field identifies the registered Netlify form.
       if (data.get('form-name') !== 'lora-contact') throw new Error('Missing form name');
-      const response = await fetch('/', {
+      // Send to a static file registered with Netlify form detection, avoiding
+      // ambiguous root redirects and preview routing behavior.
+      const response = await fetch('/__forms.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: data.toString()
       });
-      if (!response.ok) throw new Error('Netlify form submission failed');
+      if (!response.ok) throw new Error('Netlify returned HTTP ' + response.status);
       status.dataset.state = 'success';
       status.textContent = 'Thank you! Your inquiry has been submitted. LORA will contact you using the details you provided.';
       form.reset();
       // Netlify stores the actual submission; the frontend stores no details.
     } catch (error) {
       status.dataset.state = 'error';
-      status.textContent = 'We could not send your inquiry through this form. Your details are still here. Please email info@loraanimations.online or WhatsApp +234 904 820 0012 instead.';
+      const code = error.message.match(/HTTP \d{3}/)?.[0] || 'network or configuration error';
+      status.textContent = 'We could not submit your inquiry (' + code + '). Please check that Netlify Forms detection is enabled and the lora-contact form is registered. Your details are still here. Alternatively, email info@loraanimations.online or WhatsApp +234 904 820 0012.';
     } finally {
       sending = false;
       submit.disabled = false;

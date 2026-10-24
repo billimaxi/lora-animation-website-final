@@ -13,7 +13,7 @@ const { chromium } = require('playwright');
   page.on('pageerror', error => { throw error; });
   await page.route('**/*', route => {
    const request = route.request();
-   if (request.method() === 'POST' && request.url() === 'http://127.0.0.1:8000/') {
+   if (request.method() === 'POST' && request.url() === 'http://127.0.0.1:8000/__forms.html') {
      submitted.push({url:request.url(),headers:request.headers(),body:request.postData()});
      return route.fulfill({status:statusCode,body:statusCode===200?'OK':'Not Found'});
    }
@@ -42,7 +42,7 @@ const { chromium } = require('playwright');
   await fill('Second Reviewer');
   await form.locator('[type="submit"]').click();
   await page.locator('#lora-form-status[data-state="error"]').waitFor();
-  assert.match(await page.locator('#lora-form-status').textContent(),/could not send/);
+  assert.match(await page.locator('#lora-form-status').textContent(),/could not submit.*HTTP 404/);
   assert.equal(page.url(),'http://127.0.0.1:8000/contact/');
   assert.equal(await form.locator('[name="name"]').inputValue(),'Second Reviewer');
   assert.equal(submitted.length,2);

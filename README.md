@@ -108,3 +108,7 @@ approved deployment before claiming live-news availability.
 3. The contact form is statically present in `contact/index.html` with `data-netlify="true"`, `name="lora-contact"`, matching `form-name`, and a honeypot. The client submits URL-encoded data via POST to `/`, a static route, and now shows errors inline instead of redirecting to a 404.
 4. Retry a realistic test inquiry, then confirm it is recorded in Netlify's **Forms → lora-contact** verified or spam submissions. Do not claim successful delivery solely because the browser shows a success message.
 5. If detection is enabled and no form appears after a fresh deploy, review the Netlify deploy logs/form post-processing and support guide; this requires access to the Netlify dashboard.
+
+
+### Explicit form registration endpoint
+Form detection now uses a single static form blueprint in `/__forms.html` with every field submitted by `/contact/`. The visible form no longer declares a second independent Netlify form. The browser submits to the explicit static endpoint `/__forms.html` instead of `/`, and includes HTTP error details for troubleshooting. **You must enable Netlify Forms detection in the dashboard and deploy again**: source changes alone cannot turn on a disabled site setting. A 404 after that indicates an unregistered form or blocked POST; confirm `lora-contact` is listed in Netlify's Active forms, and review deploy form detection logs. Local tests mock responses; a browser success message does not prove Netlify stored the inquiry.
