@@ -49,18 +49,9 @@ form input,form select,form textarea{width:100%;min-width:0;box-sizing:border-bo
 form textarea{resize:vertical}form .form-help{font-size:12px;color:#b8b7b0;line-height:1.6}
 form .consent{flex-direction:row;align-items:flex-start;line-height:1.6;font-size:12px;gap:10px}
 form .consent input{width:18px;height:18px;flex:none;accent-color:#dcb25d}
-.assistant-toggle{position:fixed;right:24px;bottom:24px;z-index:20;border:1px solid #e9bd65;background:#dcb25d;color:#15130e;padding:15px 20px;font:700 14px Manrope;cursor:pointer;box-shadow:0 6px 25px #0006}
-.assistant-panel{position:fixed;right:24px;bottom:90px;width:360px;max-width:calc(100vw - 32px);max-height:calc(100dvh - 120px);overflow:auto;z-index:21;background:#181916;color:#eee;border:1px solid #dcb25d;padding:22px;box-sizing:border-box;box-shadow:0 12px 40px #0009}
-.assistant-panel[hidden]{display:none}.assistant-header{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.assistant-header h2{font:700 19px Manrope;letter-spacing:0}
-.assistant-close{background:transparent;border:1px solid #ffffff44;color:white;font-size:24px;min-width:44px;min-height:44px;cursor:pointer}
-.assistant-panel p{font-size:14px;line-height:1.7}.assistant-panel .assistant-disclosure{font-size:12px;color:#b8b7b0;border-bottom:1px solid #ffffff24;padding-bottom:14px}
-.assistant-panel a{color:#e9bd65;text-decoration:underline}.assistant-topics{display:grid;gap:8px;margin-top:18px}
-.assistant-topics button{border:1px solid #dcb25d88;background:#10110f;color:#e9bd65;padding:12px;text-align:left;cursor:pointer;font:600 13px Manrope}
-.assistant-topics button:hover{background:#29251c}footer{padding-bottom:100px}
 @media(min-width:801px){header{gap:18px}nav{gap:16px}}
 @media(max-width:1100px) and (min-width:801px){header{padding:0 3%}nav{gap:10px}nav a{font-size:11px}}
-@media(max-width:800px){.assistant-toggle{right:16px;bottom:16px}.assistant-panel{right:16px;bottom:80px}.plans-grid .subscribe{padding:15px 12px}.guides ol{font-size:14px}nav a{padding:8px 0}.navbtn{padding:10px 16px}}
+@media(max-width:800px){.plans-grid .subscribe{padding:15px 12px}.guides ol{font-size:14px}nav a{padding:8px 0}.navbtn{padding:10px 16px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 /* Multiple dedicated, directly addressable website pages */
@@ -148,31 +139,3 @@ form button:disabled{cursor:wait;opacity:.7}
   .about-pillars{grid-template-columns:1fr}
   .about-intro{padding-top:65px;padding-bottom:65px}
 }
-
-/* LORA Guide human handoff: WhatsApp now, Tidio when connected. */
-.assistant-handoff{margin-top:17px;padding:15px 14px;border:1px solid #dcb25d55;background:linear-gradient(140deg,#282519,#1d1e19);border-radius:10px}
-.assistant-handoff p{font-weight:700;font-size:13px;margin:0 0 10px}
-.assistant-handoff .assistant-human-link{display:block;padding:12px 14px;text-align:center;background:#dcb25d;color:#17150f;text-decoration:none;border-radius:7px;font:800 12px Manrope;line-height:1.35}
-.assistant-handoff .assistant-human-link:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.assistant-handoff .assistant-human-link:hover{background:#f0ca79;color:#15130e}
-.assistant-handoff-note{display:block;color:#b7b2a5;margin-top:10px;font-size:11px;line-height:1.55}
-
-/* Guided answers before an explicit LORA human-support handoff. */
-.assistant-panel{border-radius:16px;padding:21px;max-height:calc(100dvh - 110px)}
-#assistant-answer{display:grid;gap:10px;margin:13px 0;min-height:85px}
-.assistant-bubble{padding:12px 13px;border-radius:11px;min-width:0;overflow-wrap:anywhere}
-.assistant-bubble-guide{background:#24261f;border:1px solid #ffffff19;margin-right:12px}
-.assistant-bubble-visitor{background:#332e20;border:1px solid #c69b4e70;margin-left:27px}
-.assistant-speaker{display:block;font:800 9px/1.2 Manrope;letter-spacing:.15em;color:#dcb25d;margin-bottom:8px}
-.assistant-bubble p{margin:0 0 9px;font-size:13px;line-height:1.65}
-.assistant-bubble p:last-child{margin-bottom:0}
-.assistant-bubble a{font-size:12px}
-.assistant-topic-label,.assistant-handoff-step{display:block;margin-top:18px;font:800 10px/1.6 Manrope;letter-spacing:.13em;color:#e6c27b}
-.assistant-topics{margin-top:9px}
-.assistant-topics button{border-radius:8px;transition:background .2s,border-color .2s}
-.assistant-topics button[aria-pressed="true"]{border-color:#e8bc69;background:#3b3222;color:#fff0cf}
-.assistant-handoff{border-radius:12px}
-.assistant-handoff[hidden]{display:none!important}
-.assistant-handoff-step{margin:0 0 6px}
-.assistant-handoff p{margin:0 0 12px}
-@media(max-width:800px){.assistant-panel{width:min(390px,calc(100vw - 24px));right:12px;bottom:77px;padding:17px;max-height:calc(100dvh - 98px)}}

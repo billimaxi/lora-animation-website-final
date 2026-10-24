@@ -54,149 +54,40 @@ if(heroSlides.length>1){
 
 // Local, rule-based guidance only. No API, free-text collection or storage.
 // LORA Guide: preset question-and-answer flow; only explicit human handoff loads a chat UI.
-const assistantToggle = document.querySelector('.assistant-toggle');
-const assistantPanel = document.getElementById('lora-assistant');
-const assistantClose = document.querySelector('.assistant-close');
-const assistantAnswer = document.getElementById('assistant-answer');
-const assistantTopics = {
-  services: {
-    question: 'What services does LORA offer?',
-    answer: '<p>We create AI animation, promotional commercials, product and launch visuals, brand storytelling, and music-video or cultural animations.</p><a href="/services/">Explore our services →</a>'
-  },
-  plans: {
-    question: 'How much do your plans cost?',
-    answer: '<p>Essential: $150 USD/month for 4 AI videos monthly. Growth: $250 USD/month for up to 12 AI videos monthly. Studio Retainer: $500 USD/month for up to 16 AI videos monthly. Final deliverables, length and revisions are agreed with LORA.</p><a href="/plans/">See the full plans →</a>'
-  },
-  brief: {
-    question: 'How do I start a project?',
-    answer: '<p>Tell us about your business, who you want to reach, your goal, preferred video style, budget and target date. References are helpful, but you do not need a finished script.</p><a href="/guides/">Read our project guides →</a>'
-  },
-  payments: {
-    question: 'How do subscriptions and payments work?',
-    answer: '<p>Our Subscribe Now buttons open Flutterwave for monthly billing. Review the amount and payment terms before confirming. For changes, cancellations or payment concerns, contact the LORA team. The Guide cannot access accounts, take payment details or cancel a plan.</p><a href="/faq/">Read the payment FAQs →</a>'
-  },
-  contact: {
-    question: 'How can I contact LORA?',
-    answer: '<p>Send a project inquiry or speak to us directly. Please do not share passwords or card details here.</p><a href="/contact/">Send a project inquiry →</a><p>Email: <a href="mailto:info@loraanimations.online">info@loraanimations.online</a></p>'
-  },
-  support: {
-    question: "I'd like to speak to a person",
-    answer: '<p>Of course! Select <strong>Talk to LORA Support</strong> below. The live-chat window opens only when you choose it. If our team is offline, you can leave a message for a later reply.</p>'
-  }
-};
-function setAssistantOpen(open) {
-  if (!assistantPanel || !assistantToggle) return;
-  assistantPanel.hidden = !open;
-  assistantToggle.setAttribute('aria-expanded', String(open));
-  if (open) assistantClose?.focus();
-  else assistantToggle.focus();
-}
-assistantToggle?.addEventListener('click', () => setAssistantOpen(assistantPanel.hidden));
-assistantClose?.addEventListener('click', () => setAssistantOpen(false));
-assistantPanel?.addEventListener('keydown', event => {
-  if (event.key === 'Escape') {
-    event.stopPropagation();
-    setAssistantOpen(false);
-  }
-});
-assistantPanel?.querySelectorAll('[data-topic]').forEach(button => {
-  button.addEventListener('click', () => {
-    const topic = assistantTopics[button.dataset.topic];
-    if (!topic || !assistantAnswer) return;
-    const visitorBubble = document.createElement('div');
-    visitorBubble.className = 'assistant-bubble assistant-bubble-visitor';
-    const visitorTitle = document.createElement('span');
-    visitorTitle.className = 'assistant-speaker';
-    visitorTitle.textContent = 'YOUR QUESTION';
-    const visitorText = document.createElement('p');
-    visitorText.textContent = topic.question;
-    visitorBubble.append(visitorTitle, visitorText);
-    const guideBubble = document.createElement('div');
-    guideBubble.className = 'assistant-bubble assistant-bubble-guide';
-    const guideTitle = document.createElement('span');
-    guideTitle.className = 'assistant-speaker';
-    guideTitle.textContent = 'LORA GUIDE';
-    const guideResponse = document.createElement('div');
-    // These are author-controlled templates; no visitor-supplied HTML is inserted.
-    guideResponse.innerHTML = topic.answer;
-    guideBubble.append(guideTitle, guideResponse);
-    assistantAnswer.replaceChildren(visitorBubble, guideBubble);
-    const handoff = assistantPanel.querySelector('.assistant-handoff');
-    if (handoff) handoff.hidden = false;
-    assistantPanel.querySelectorAll('[data-topic]').forEach(option =>
-      option.setAttribute('aria-pressed', String(option === button)));
-  });
-});
-
-// One chat launcher: LORA Guide. The actual human chat is powered by Tidio
-// only after the visitor explicitly selects the handoff.
+// Tidio is the site's only chat widget. Show its normal, clickable launcher.
+// Offer a small, clearly automated welcome when a visitor opens live chat.
+// Per Tidio's widget API, messageFromOperator is browser-visible only; it is
+// not an operator inbox message. Real visitor replies go through Tidio.
 (() => {
-  if (!assistantPanel) return;
-  const topics = assistantPanel.querySelector('.assistant-topics');
-  if (!topics) return;
-  const handoff = document.createElement('div');
-  handoff.className = 'assistant-handoff';
-  handoff.hidden = true; // Guide replies appear before the support handoff.
-  handoff.innerHTML = '<span class="assistant-handoff-step">STEP 2 · HUMAN SUPPORT</span><p>Need more than a quick answer?</p><a class="assistant-human-link" href="https://wa.me/2349048200012?text=Hello%20LORA%2C%20I%20would%20like%20to%20speak%20with%20your%20team." target="_blank" rel="noopener noreferrer">Chat with LORA on WhatsApp ↗</a><small class="assistant-handoff-note">This opens WhatsApp if live chat is unavailable. A team member will reply when available.</small>';
-  topics.insertAdjacentElement('afterend', handoff);
-  const link = handoff.querySelector('.assistant-human-link');
-  const note = handoff.querySelector('.assistant-handoff-note');
-  const tidioIsReady = () => {
+  const welcome = 'Automated LORA welcome 👋 Thank you for visiting LORA Animations! Have a question about AI animation, advertising, our plans or a project? Send us a message here. Our team will reply when available.';
+  const storageKey = 'lora-tidio-welcome-shown-v1';
+  let greeted = false;
+  const greet = () => {
     const api = window.tidioChatApi;
-    return Boolean(api && typeof api.open === 'function' &&
-      typeof api.getStatus === 'function' && api.getStatus() !== null);
+    if (!api || typeof api.messageFromOperator !== 'function' || greeted) return;
+    try {
+      if (sessionStorage.getItem(storageKey) === '1') {
+        greeted = true;
+        return;
+      }
+    } catch { /* Storage may be blocked; still greet during this page visit. */ }
+    greeted = true;
+    api.messageFromOperator(welcome);
+    try { sessionStorage.setItem(storageKey, '1'); } catch {}
   };
-  const updateHandoff = () => {
-    if (!tidioIsReady()) {
-      link.textContent = 'Chat with LORA on WhatsApp ↗';
-      note.textContent = 'Live chat is loading or unavailable. WhatsApp opens in a new tab and our team will reply when available.';
-      return;
-    }
-    link.textContent = 'Talk to LORA Support ↗';
-    link.setAttribute('aria-label', 'Open LORA live support chat');
-    const available = window.tidioChatApi.getStatus() === 'online';
-    note.textContent = available
-      ? 'Team members are currently online. This will open the live-support chat.'
-      : 'Our team may be offline. Open the support chat to leave a message for a later reply.';
-  };
-  link.addEventListener('click', event => {
-    if (!tidioIsReady()) return; // Preserve the working WhatsApp fallback.
-    event.preventDefault();
-    setAssistantOpen(false);
+  const onReady = () => {
     const api = window.tidioChatApi;
+    if (!api || typeof api.on !== 'function') return;
     if (typeof api.show === 'function') api.show();
-    api.open();
-  });
-  // Hide Tidio's separate launcher: visitors should see only LORA Guide.
-  let listenersAdded = false;
-  const onTidioReady = () => {
-    if (!tidioIsReady()) return;
-    const api = window.tidioChatApi;
-    if (typeof api.hide === 'function') api.hide();
-    if (!listenersAdded && typeof api.on === 'function') {
-      listenersAdded = true;
-      api.on('close', () => {
-        if (typeof api.hide === 'function') api.hide();
-      });
-      api.on('setStatus', updateHandoff);
-    }
-    updateHandoff();
+    if (typeof api.setColorPalette === 'function') api.setColorPalette('#dcb25d');
+    api.on('open', greet);
   };
-  if (tidioIsReady()) onTidioReady();
-  else if (window.tidioChatApi?.on) window.tidioChatApi.on('ready', onTidioReady);
-  else document.addEventListener('tidioChat-ready', onTidioReady);
-  updateHandoff();
-})();
-
-assistantAnswer?.addEventListener('click', event => {
-  const link = event.target.closest('a[href^="#"]');
-  if (link) {
-    setAssistantOpen(false);
-    const target = document.querySelector(link.getAttribute('href'));
-    if (target) { target.setAttribute('tabindex', '-1'); target.focus(); }
+  if (window.tidioChatApi?.on) {
+    window.tidioChatApi.on('ready', onReady);
+  } else {
+    document.addEventListener('tidioChat-ready', onReady, { once: true });
   }
-});
-
+})();
 
 // Reliable Netlify Forms submission: POST URL-encoded data to an existing static path.
 // Show success/error on the same page so failed form processing never navigates to a 404.
