@@ -90,43 +90,64 @@ assistantAnswer?.addEventListener('click', event => {
   }
 });
 
-// AI & Tech news ticker. Headlines are loaded from a Netlify server-side RSS proxy;
-// no unverified or invented "latest" headlines are presented.
+// LORA Tech Radar: visible carousel. Rotates source-discovery slides even when
+// publisher RSS feeds are blocked or temporarily unavailable. Never invent headlines.
 (() => {
-  const bar = document.getElementById('lora-news-ticker');
-  if (!bar) return;
-  const title = document.getElementById('news-headline');
-  const source = document.getElementById('news-source');
-  const previous = document.getElementById('news-prev');
-  const next = document.getElementById('news-next');
-  const close = document.getElementById('news-close');
-  let headlines = [];
-  let current = 0;
-  let rotation;
-  if (sessionStorage.getItem('lora-news-hidden') === '1') { bar.hidden = true; return; }
-  function show(index) {
-    if (!headlines.length) return;
-    current = (index + headlines.length) % headlines.length;
-    const story = headlines[current];
-    title.textContent = story.title + ' ↗';
-    title.href = story.url;
-    source.textContent = story.source;
-  }
-  function rotate() {
-    if (rotation) clearInterval(rotation);
-    if (headlines.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      rotation = setInterval(() => show(current + 1), 8500);
-    }
-  }
-  previous?.addEventListener('click', () => { show(current - 1); rotate(); });
-  next?.addEventListener('click', () => { show(current + 1); rotate(); });
-  close?.addEventListener('click', () => { bar.hidden = true; clearInterval(rotation); sessionStorage.setItem('lora-news-hidden','1'); });
-  fetch('/.netlify/functions/tech-news', {headers:{Accept:'application/json'}, signal:AbortSignal.timeout(9000)})
-    .then(response => {if (!response.ok) throw new Error('News feed unavailable');return response.json();})
-    .then(data => {
-      if (!Array.isArray(data.items)) return;
-      headlines = data.items.filter(item => item && typeof item.title === 'string' && /^https:\/\//.test(item.url) && typeof item.source === 'string').slice(0,12);
-      if(headlines.length) { show(0); rotate(); }
-    })
-    .catch(() => {source.textContent = 'AI & TECH'; /* Keep the explicit topic link as a graceful fallback. */});
+ const root=document.getElementById('lora-news-ticker');
+ if(!root)return;
+ const title=document.getElementById('news-headline'),read=document.getElementById('news-read');
+ const source=document.getElementById('news-source'),count=document.getElementById('news-count');
+ const state=document.getElementById('news-state'),status=document.getElementById('news-status');
+ const progress=document.getElementById('news-progress');
+ const previous=document.getElementById('news-prev'),next=document.getElementById('news-next');
+ const pause=document.getElementById('news-pause');
+ // Explicitly labeled source links, not presented as current headlines.
+ const fallback=[
+  {title:'Explore the latest artificial intelligence coverage',url:'https://techcrunch.com/category/artificial-intelligence/',source:'TECHCRUNCH · EXPLORE'},
+  {title:'Discover technology and AI reporting',url:'https://www.theverge.com/ai-artificial-intelligence',source:'THE VERGE · EXPLORE'},
+  {title:'Browse research and science technology stories',url:'https://arstechnica.com/ai/',source:'ARS TECHNICA · EXPLORE'}
+ ];
+ let items=fallback,current=0,paused=false,timer=null;
+ const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function show(n){
+  current=(n+items.length)%items.length;
+  const item=items[current];
+  title.textContent=item.title+' ↗';title.href=item.url;
+  read.href=item.url; source.textContent=item.source;
+  count.textContent=String(current+1).padStart(2,'0')+' / '+String(items.length).padStart(2,'0');
+  root.classList.remove('news-slide-enter');void root.offsetWidth;root.classList.add('news-slide-enter');
+  if(progress){progress.style.animation='none';void progress.offsetWidth;progress.style.animation=(!paused&&!reduceMotion)?'loraNewsProgress 7s linear forwards':'none';}
+ }
+ function schedule(){
+  if(timer)clearInterval(timer);
+  if(!paused&&!reduceMotion&&items.length>1) timer=setInterval(()=>show(current+1),7000);
+ }
+ previous?.addEventListener('click',()=>{show(current-1);schedule();});
+ next?.addEventListener('click',()=>{show(current+1);schedule();});
+ pause?.addEventListener('click',()=>{
+  paused=!paused;pause.textContent=paused?'▶':'Ⅱ';
+  pause.setAttribute('aria-pressed',String(paused));
+  pause.setAttribute('aria-label',paused?'Play news slideshow':'Pause news slideshow');
+  status.textContent=paused?'Slideshow paused':(state.dataset.live?'Fresh publisher headlines':'Explore technology sources');
+  show(current);schedule();
+ });
+ root.addEventListener('mouseenter',()=>{if(timer)clearInterval(timer);});
+ root.addEventListener('mouseleave',schedule);
+ root.addEventListener('focusin',()=>{if(timer)clearInterval(timer);});
+ root.addEventListener('focusout',e=>{if(!root.contains(e.relatedTarget))schedule();});
+ // Show useful rotating links immediately while the RSS function loads.
+ show(0);schedule();
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),8000);
+ fetch('/.netlify/functions/tech-news',{headers:{Accept:'application/json'},signal:controller.signal})
+  .then(r=>{if(!r.ok)throw new Error('Feed unavailable');return r.json();})
+  .then(data=>{
+   if(!Array.isArray(data.items))return;
+   const fresh=data.items.filter(item=>item&&typeof item.title==='string'&&item.title.length>8&&/^https:\/\//.test(item.url)&&typeof item.source==='string').slice(0,12);
+   if(!fresh.length)return;
+   items=fresh;current=0;state.textContent='PUBLISHER HEADLINES';state.dataset.live='1';
+   status.textContent='Headlines from external publishers · Open original story';
+   show(0);schedule();
+  }).catch(()=>{state.textContent='EXPLORE TECH NEWS';status.textContent='Live feed temporarily unavailable · Browse publisher links';})
+  .finally(()=>clearTimeout(timeout));
 })();
