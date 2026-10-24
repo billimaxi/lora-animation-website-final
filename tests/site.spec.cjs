@@ -80,6 +80,7 @@ const { chromium } = require('playwright');
         assert.ok((await page.locator('#assistant-answer').innerText()).length > 60);
       }
       assert.equal(await page.locator('.assistant-human-link').count(), 1);
+      assert.equal(await page.locator('.assistant-handoff').isVisible(), true);
       assert.match(await page.locator('.assistant-human-link').getAttribute('href'), /^https:\/\/wa\.me\/2349048200012/);
       assert.match(await page.locator('.assistant-human-link').textContent(), /WhatsApp/);
       const bounds = await page.locator('#lora-assistant').boundingBox();

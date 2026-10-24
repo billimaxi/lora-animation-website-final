@@ -53,43 +53,91 @@ if(heroSlides.length>1){
 
 
 // Local, rule-based guidance only. No API, free-text collection or storage.
+// LORA Guide: preset question-and-answer flow; only explicit human handoff loads a chat UI.
 const assistantToggle = document.querySelector('.assistant-toggle');
 const assistantPanel = document.getElementById('lora-assistant');
 const assistantClose = document.querySelector('.assistant-close');
 const assistantAnswer = document.getElementById('assistant-answer');
 const assistantTopics = {
-  services: '<p>LORA creates launch visuals, sales and promotional content, brand stories, music-video visuals and cultural animation.</p><a href="/services/">Explore services →</a>',
-  plans: '<p>Essential: $150 USD/month, 4 AI videos per month. Growth: $250 USD/month, 3 per week (up to 12/month). Studio Retainer: $500 USD/month, 4 per week (up to 16/month). Agree length, revisions and scheduling with LORA before subscribing.</p><a href="/plans/">Compare packages and subscription options →</a>',
-  brief: '<p>Share your audience, goal, video formats, brand assets, reference links, budget and deadline. You do not need a finished script to start.</p><a href="/guides/">Read the beginner guides →</a>',
-  payments: '<p>Subscription buttons open Flutterwave. Review its billing terms before paying. For cancellations, changes or payment issues, contact LORA with your transaction reference. This guide cannot access accounts, take payments or cancel subscriptions.</p><a href="/faq/">Read payment and cancellation FAQs →</a>',
-  contact: '<p>Ready to discuss a project? Send a brief or contact the team directly. Never share passwords or card details.</p><a href="/contact/">Project inquiry form →</a><p><a href="mailto:info@loraanimations.online">Email LORA</a> · <a href="https://wa.me/2349048200012" target="_blank" rel="noopener noreferrer">WhatsApp LORA ↗</a></p>'
+  services: {
+    question: 'What services does LORA offer?',
+    answer: '<p>We create AI animation, promotional commercials, product and launch visuals, brand storytelling, and music-video or cultural animations.</p><a href="/services/">Explore our services →</a>'
+  },
+  plans: {
+    question: 'How much do your plans cost?',
+    answer: '<p>Essential: $150 USD/month for 4 AI videos monthly. Growth: $250 USD/month for up to 12 AI videos monthly. Studio Retainer: $500 USD/month for up to 16 AI videos monthly. Final deliverables, length and revisions are agreed with LORA.</p><a href="/plans/">See the full plans →</a>'
+  },
+  brief: {
+    question: 'How do I start a project?',
+    answer: '<p>Tell us about your business, who you want to reach, your goal, preferred video style, budget and target date. References are helpful, but you do not need a finished script.</p><a href="/guides/">Read our project guides →</a>'
+  },
+  payments: {
+    question: 'How do subscriptions and payments work?',
+    answer: '<p>Our Subscribe Now buttons open Flutterwave for monthly billing. Review the amount and payment terms before confirming. For changes, cancellations or payment concerns, contact the LORA team. The Guide cannot access accounts, take payment details or cancel a plan.</p><a href="/faq/">Read the payment FAQs →</a>'
+  },
+  contact: {
+    question: 'How can I contact LORA?',
+    answer: '<p>Send a project inquiry or speak to us directly. Please do not share passwords or card details here.</p><a href="/contact/">Send a project inquiry →</a><p>Email: <a href="mailto:info@loraanimations.online">info@loraanimations.online</a></p>'
+  },
+  support: {
+    question: "I'd like to speak to a person",
+    answer: '<p>Of course! Select <strong>Talk to LORA Support</strong> below. The live-chat window opens only when you choose it. If our team is offline, you can leave a message for a later reply.</p>'
+  }
 };
 function setAssistantOpen(open) {
+  if (!assistantPanel || !assistantToggle) return;
   assistantPanel.hidden = !open;
   assistantToggle.setAttribute('aria-expanded', String(open));
-  if (open) assistantClose.focus();
+  if (open) assistantClose?.focus();
   else assistantToggle.focus();
 }
 assistantToggle?.addEventListener('click', () => setAssistantOpen(assistantPanel.hidden));
 assistantClose?.addEventListener('click', () => setAssistantOpen(false));
 assistantPanel?.addEventListener('keydown', event => {
-  if (event.key === 'Escape') setAssistantOpen(false);
+  if (event.key === 'Escape') {
+    event.stopPropagation();
+    setAssistantOpen(false);
+  }
 });
 assistantPanel?.querySelectorAll('[data-topic]').forEach(button => {
   button.addEventListener('click', () => {
-    // Only author-controlled templates are rendered; no visitor input is interpolated.
-    assistantAnswer.innerHTML = assistantTopics[button.dataset.topic];
+    const topic = assistantTopics[button.dataset.topic];
+    if (!topic || !assistantAnswer) return;
+    const visitorBubble = document.createElement('div');
+    visitorBubble.className = 'assistant-bubble assistant-bubble-visitor';
+    const visitorTitle = document.createElement('span');
+    visitorTitle.className = 'assistant-speaker';
+    visitorTitle.textContent = 'YOUR QUESTION';
+    const visitorText = document.createElement('p');
+    visitorText.textContent = topic.question;
+    visitorBubble.append(visitorTitle, visitorText);
+    const guideBubble = document.createElement('div');
+    guideBubble.className = 'assistant-bubble assistant-bubble-guide';
+    const guideTitle = document.createElement('span');
+    guideTitle.className = 'assistant-speaker';
+    guideTitle.textContent = 'LORA GUIDE';
+    const guideResponse = document.createElement('div');
+    // These are author-controlled templates; no visitor-supplied HTML is inserted.
+    guideResponse.innerHTML = topic.answer;
+    guideBubble.append(guideTitle, guideResponse);
+    assistantAnswer.replaceChildren(visitorBubble, guideBubble);
+    const handoff = assistantPanel.querySelector('.assistant-handoff');
+    if (handoff) handoff.hidden = false;
+    assistantPanel.querySelectorAll('[data-topic]').forEach(option =>
+      option.setAttribute('aria-pressed', String(option === button)));
   });
 });
-// Human handoff: WhatsApp by default; Tidio chat when the widget is installed and ready.
-// No Guide answers or personal details are transmitted to a provider by this control.
+
+// One chat launcher: LORA Guide. The actual human chat is powered by Tidio
+// only after the visitor explicitly selects the handoff.
 (() => {
   if (!assistantPanel) return;
   const topics = assistantPanel.querySelector('.assistant-topics');
   if (!topics) return;
   const handoff = document.createElement('div');
   handoff.className = 'assistant-handoff';
-  handoff.innerHTML = '<p>Want to speak with someone from LORA?</p><a class="assistant-human-link" href="https://wa.me/2349048200012?text=Hello%20LORA%2C%20I%20would%20like%20to%20speak%20with%20your%20team." target="_blank" rel="noopener noreferrer">Chat with LORA on WhatsApp ↗</a><small class="assistant-handoff-note">This opens WhatsApp. A team member will respond when available.</small>';
+  handoff.hidden = true; // Guide replies appear before the support handoff.
+  handoff.innerHTML = '<span class="assistant-handoff-step">STEP 2 · HUMAN SUPPORT</span><p>Need more than a quick answer?</p><a class="assistant-human-link" href="https://wa.me/2349048200012?text=Hello%20LORA%2C%20I%20would%20like%20to%20speak%20with%20your%20team." target="_blank" rel="noopener noreferrer">Chat with LORA on WhatsApp ↗</a><small class="assistant-handoff-note">This opens WhatsApp if live chat is unavailable. A team member will reply when available.</small>';
   topics.insertAdjacentElement('afterend', handoff);
   const link = handoff.querySelector('.assistant-human-link');
   const note = handoff.querySelector('.assistant-handoff-note');
@@ -99,31 +147,38 @@ assistantPanel?.querySelectorAll('[data-topic]').forEach(button => {
       typeof api.getStatus === 'function' && api.getStatus() !== null);
   };
   const updateHandoff = () => {
-    if (tidioIsReady()) {
-      link.textContent = 'Open live chat with LORA ↗';
-      note.textContent = 'Continue in a separate chat window. Team replies depend on availability.';
-    } else {
+    if (!tidioIsReady()) {
       link.textContent = 'Chat with LORA on WhatsApp ↗';
-      note.textContent = 'This opens WhatsApp. A team member will respond when available.';
+      note.textContent = 'Live chat is loading or unavailable. WhatsApp opens in a new tab and our team will reply when available.';
+      return;
     }
+    link.textContent = 'Talk to LORA Support ↗';
+    link.setAttribute('aria-label', 'Open LORA live support chat');
+    const available = window.tidioChatApi.getStatus() === 'online';
+    note.textContent = available
+      ? 'Team members are currently online. This will open the live-support chat.'
+      : 'Our team may be offline. Open the support chat to leave a message for a later reply.';
   };
   link.addEventListener('click', event => {
-    if (!tidioIsReady()) return;
+    if (!tidioIsReady()) return; // Preserve the working WhatsApp fallback.
     event.preventDefault();
     setAssistantOpen(false);
-    if (typeof window.tidioChatApi.show === 'function') window.tidioChatApi.show();
-    window.tidioChatApi.open();
+    const api = window.tidioChatApi;
+    if (typeof api.show === 'function') api.show();
+    api.open();
   });
-  // Keep a single floating launcher: the branded LORA Guide.
-  // Tidio is revealed only when visitors explicitly choose live chat.
+  // Hide Tidio's separate launcher: visitors should see only LORA Guide.
+  let listenersAdded = false;
   const onTidioReady = () => {
     if (!tidioIsReady()) return;
     const api = window.tidioChatApi;
     if (typeof api.hide === 'function') api.hide();
-    if (typeof api.on === 'function') {
+    if (!listenersAdded && typeof api.on === 'function') {
+      listenersAdded = true;
       api.on('close', () => {
         if (typeof api.hide === 'function') api.hide();
       });
+      api.on('setStatus', updateHandoff);
     }
     updateHandoff();
   };
@@ -138,7 +193,7 @@ assistantAnswer?.addEventListener('click', event => {
   if (link) {
     setAssistantOpen(false);
     const target = document.querySelector(link.getAttribute('href'));
-    if(target){target.setAttribute('tabindex', '-1');target.focus();}
+    if (target) { target.setAttribute('tabindex', '-1'); target.focus(); }
   }
 });
 

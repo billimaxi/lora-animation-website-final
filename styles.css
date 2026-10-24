@@ -156,3 +156,23 @@ form button:disabled{cursor:wait;opacity:.7}
 .assistant-handoff .assistant-human-link:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .assistant-handoff .assistant-human-link:hover{background:#f0ca79;color:#15130e}
 .assistant-handoff-note{display:block;color:#b7b2a5;margin-top:10px;font-size:11px;line-height:1.55}
+
+/* Guided answers before an explicit LORA human-support handoff. */
+.assistant-panel{border-radius:16px;padding:21px;max-height:calc(100dvh - 110px)}
+#assistant-answer{display:grid;gap:10px;margin:13px 0;min-height:85px}
+.assistant-bubble{padding:12px 13px;border-radius:11px;min-width:0;overflow-wrap:anywhere}
+.assistant-bubble-guide{background:#24261f;border:1px solid #ffffff19;margin-right:12px}
+.assistant-bubble-visitor{background:#332e20;border:1px solid #c69b4e70;margin-left:27px}
+.assistant-speaker{display:block;font:800 9px/1.2 Manrope;letter-spacing:.15em;color:#dcb25d;margin-bottom:8px}
+.assistant-bubble p{margin:0 0 9px;font-size:13px;line-height:1.65}
+.assistant-bubble p:last-child{margin-bottom:0}
+.assistant-bubble a{font-size:12px}
+.assistant-topic-label,.assistant-handoff-step{display:block;margin-top:18px;font:800 10px/1.6 Manrope;letter-spacing:.13em;color:#e6c27b}
+.assistant-topics{margin-top:9px}
+.assistant-topics button{border-radius:8px;transition:background .2s,border-color .2s}
+.assistant-topics button[aria-pressed="true"]{border-color:#e8bc69;background:#3b3222;color:#fff0cf}
+.assistant-handoff{border-radius:12px}
+.assistant-handoff[hidden]{display:none!important}
+.assistant-handoff-step{margin:0 0 6px}
+.assistant-handoff p{margin:0 0 12px}
+@media(max-width:800px){.assistant-panel{width:min(390px,calc(100vw - 24px));right:12px;bottom:77px;padding:17px;max-height:calc(100dvh - 98px)}}
