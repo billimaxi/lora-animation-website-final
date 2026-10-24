@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><title>LORA Forms Registration</title></head>
+<body>
+<!-- Netlify scans this static document at deploy time. The public contact form is at /contact/. -->
+<form name="lora-contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="lora-contact">
+  <input type="text" name="bot-field">
+  <input type="text" name="name">
+  <input type="email" name="email">
+  <select name="interest"><option value="">Choose service</option><option>Launch Visuals</option><option>Sales &amp; Promo Content</option><option>Brand Storytelling</option><option>Music Video</option><option>Essential Plan — $150/month</option><option>Growth Plan — $250/month</option><option>Studio Retainer — $500/month</option><option>Something else</option></select>
+  <input type="text" name="business">
+  <select name="budget"><option value="">Not sure yet</option><option>Under $150</option><option>$150–$250</option><option>$250–$500</option><option>$500+</option></select>
+  <input type="text" name="timeline">
+  <textarea name="message"></textarea>
+  <input type="checkbox" name="contact-consent" value="yes">
+  <button type="submit">Submit</button>
+</form>
+<p>This is a technical registration page. To contact LORA Animations, visit <a href="/contact/">our contact page</a>.</p>
+</body>
+</html>
