@@ -148,3 +148,11 @@ form button:disabled{cursor:wait;opacity:.7}
   .about-pillars{grid-template-columns:1fr}
   .about-intro{padding-top:65px;padding-bottom:65px}
 }
+
+/* LORA Guide human handoff: WhatsApp now, Tidio when connected. */
+.assistant-handoff{margin-top:17px;padding:15px 14px;border:1px solid #dcb25d55;background:linear-gradient(140deg,#282519,#1d1e19);border-radius:10px}
+.assistant-handoff p{font-weight:700;font-size:13px;margin:0 0 10px}
+.assistant-handoff .assistant-human-link{display:block;padding:12px 14px;text-align:center;background:#dcb25d;color:#17150f;text-decoration:none;border-radius:7px;font:800 12px Manrope;line-height:1.35}
+.assistant-handoff .assistant-human-link:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.assistant-handoff .assistant-human-link:hover{background:#f0ca79;color:#15130e}
+.assistant-handoff-note{display:block;color:#b7b2a5;margin-top:10px;font-size:11px;line-height:1.55}

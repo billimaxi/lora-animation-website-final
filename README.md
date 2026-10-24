@@ -112,3 +112,9 @@ approved deployment before claiming live-news availability.
 
 ### Explicit form registration endpoint
 Form detection now uses a single static form blueprint in `/__forms.html` with every field submitted by `/contact/`. The visible form no longer declares a second independent Netlify form. The browser submits to the explicit static endpoint `/__forms.html` instead of `/`, and includes HTTP error details for troubleshooting. **You must enable Netlify Forms detection in the dashboard and deploy again**: source changes alone cannot turn on a disabled site setting. A 404 after that indicates an unregistered form or blocked POST; confirm `lora-contact` is listed in Netlify's Active forms, and review deploy form detection logs. Local tests mock responses; a browser success message does not prove Netlify stored the inquiry.
+
+
+## Human handoff from the LORA Guide (review branch)
+The on-page LORA Guide remains rule-based. It now displays a human handoff to the LORA business WhatsApp number, with no data silently transferred. If the site owner later connects Tidio by installing their unique official widget code, the same handoff detects the ready Tidio API and opens its live chat. We have not installed Tidio or claimed that a human is currently online. Avoid a second overlapping chat launcher; position or hide the Tidio bubble using its settings. The guide has no chat transcript to transfer.
+
+To remove the Powered by Netlify badge for everyone: Netlify Project configuration > General > Powered by Netlify badge > Off. This badge is injected by Netlify, not present in our source. No redeploy required.

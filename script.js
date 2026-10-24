@@ -81,6 +81,44 @@ assistantPanel?.querySelectorAll('[data-topic]').forEach(button => {
     assistantAnswer.innerHTML = assistantTopics[button.dataset.topic];
   });
 });
+// Human handoff: WhatsApp by default; Tidio chat when the widget is installed and ready.
+// No Guide answers or personal details are transmitted to a provider by this control.
+(() => {
+  if (!assistantPanel) return;
+  const topics = assistantPanel.querySelector('.assistant-topics');
+  if (!topics) return;
+  const handoff = document.createElement('div');
+  handoff.className = 'assistant-handoff';
+  handoff.innerHTML = '<p>Want to speak with someone from LORA?</p><a class="assistant-human-link" href="https://wa.me/2349048200012?text=Hello%20LORA%2C%20I%20would%20like%20to%20speak%20with%20your%20team." target="_blank" rel="noopener noreferrer">Chat with LORA on WhatsApp ↗</a><small class="assistant-handoff-note">This opens WhatsApp. A team member will respond when available.</small>';
+  topics.insertAdjacentElement('afterend', handoff);
+  const link = handoff.querySelector('.assistant-human-link');
+  const note = handoff.querySelector('.assistant-handoff-note');
+  const tidioIsReady = () => {
+    const api = window.tidioChatApi;
+    return Boolean(api && typeof api.open === 'function' &&
+      typeof api.getStatus === 'function' && api.getStatus() !== null);
+  };
+  const updateHandoff = () => {
+    if (tidioIsReady()) {
+      link.textContent = 'Open live chat with LORA ↗';
+      note.textContent = 'Continue in a separate chat window. Team replies depend on availability.';
+    } else {
+      link.textContent = 'Chat with LORA on WhatsApp ↗';
+      note.textContent = 'This opens WhatsApp. A team member will respond when available.';
+    }
+  };
+  link.addEventListener('click', event => {
+    if (!tidioIsReady()) return;
+    event.preventDefault();
+    setAssistantOpen(false);
+    if (typeof window.tidioChatApi.show === 'function') window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+  document.addEventListener('tidioChat-ready', updateHandoff);
+  if (window.tidioChatApi?.on) window.tidioChatApi.on('ready', updateHandoff);
+  updateHandoff();
+})();
+
 assistantAnswer?.addEventListener('click', event => {
   const link = event.target.closest('a[href^="#"]');
   if (link) {
