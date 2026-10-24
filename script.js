@@ -54,33 +54,15 @@ if(heroSlides.length>1){
 
 // Local, rule-based guidance only. No API, free-text collection or storage.
 // LORA Guide: preset question-and-answer flow; only explicit human handoff loads a chat UI.
-// Tidio is the site's only chat widget. Show its normal, clickable launcher.
-// Offer a small, clearly automated welcome when a visitor opens live chat.
-// Per Tidio's widget API, messageFromOperator is browser-visible only; it is
-// not an operator inbox message. Real visitor replies go through Tidio.
+// Tidio is the site's sole chat widget and the single source for its greeting.
+// Customize Home > Content and offline messages in the Tidio dashboard.
+// Avoid a second browser-injected message that conflicts with its own welcome.
 (() => {
-  const welcome = 'Automated LORA welcome 👋 Thank you for visiting LORA Animations! Have a question about AI animation, advertising, our plans or a project? Send us a message here. Our team will reply when available.';
-  const storageKey = 'lora-tidio-welcome-shown-v1';
-  let greeted = false;
-  const greet = () => {
-    const api = window.tidioChatApi;
-    if (!api || typeof api.messageFromOperator !== 'function' || greeted) return;
-    try {
-      if (sessionStorage.getItem(storageKey) === '1') {
-        greeted = true;
-        return;
-      }
-    } catch { /* Storage may be blocked; still greet during this page visit. */ }
-    greeted = true;
-    api.messageFromOperator(welcome);
-    try { sessionStorage.setItem(storageKey, '1'); } catch {}
-  };
   const onReady = () => {
     const api = window.tidioChatApi;
-    if (!api || typeof api.on !== 'function') return;
+    if (!api) return;
     if (typeof api.show === 'function') api.show();
     if (typeof api.setColorPalette === 'function') api.setColorPalette('#dcb25d');
-    api.on('open', greet);
   };
   if (window.tidioChatApi?.on) {
     window.tidioChatApi.on('ready', onReady);
