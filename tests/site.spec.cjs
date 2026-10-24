@@ -27,6 +27,26 @@ const { chromium } = require('playwright');
       assert.equal(await card.locator('.subscribe').getAttribute('target'), '_blank');
       assert.ok((await card.locator('.subscribe').getAttribute('rel')).includes('noopener'));
     }
+    // About Us replaces Founder in navigation; the founder stays near the bottom of the homepage.
+    await page.goto('http://127.0.0.1:8000/');
+    assert.equal(await page.locator('nav a[href="/about/"]').textContent(), 'About Us');
+    assert.equal(await page.locator('nav a[href="/founder/"]').count(), 0);
+    assert.equal(await page.locator('main > .founder#founder').count(), 1);
+    assert.equal(await page.locator('#founder .founder-portrait img').getAttribute('src'), '/assets/abala-ibrahim-founder.png');
+    assert.equal(await page.locator('main > section').last().getAttribute('id'), 'founder');
+    for (const width of [1440, 390, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      const portrait = await page.locator('#founder .founder-portrait img').boundingBox();
+      assert.ok(portrait.width <= 285, 'Founder portrait is compact at ' + width);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'No horizontal overflow at ' + width);
+    }
+    await page.goto('http://127.0.0.1:8000/about/');
+    assert.equal((await page.locator('h1').textContent()).includes('Good ideas deserve'), true);
+    assert.equal(await page.locator('nav a[href="/about/"]').getAttribute('aria-current'), 'page');
+    assert.equal(await page.locator('.about-pillars article').count(), 3);
+    assert.equal(await page.locator('a[href="/#founder"]').count(), 1);
+    await page.goto('http://127.0.0.1:8000/founder/');
+    assert.equal(await page.locator('.founder-portrait img').count(), 1);
     await page.goto('http://127.0.0.1:8000/contact/');
     const form = page.locator('form[name="lora-contact"]');
     for (const [attribute, value] of Object.entries({ method: 'POST', 'data-netlify': 'true', 'netlify-honeypot': 'bot-field', action: '/success' })) {
