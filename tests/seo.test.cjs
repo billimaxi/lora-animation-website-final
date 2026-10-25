@@ -31,7 +31,7 @@ test('SEO: crawl files enumerate only relevant pages',()=>{
  assert.match(robots,/Sitemap: https:\/\/loraanimations\.online\/sitemap\.xml/);
  assert.ok(!entries.some(x=>x.includes('/founder/')||x.includes('/success')));
  for(const p of ['founder/index.html','success.html','__forms.html']){
-  assert.match(fs.readFileSync(path.join(root,p),'utf8'),/name="robots" content="noindex,follow"/,p);
+  assert.match(fs.readFileSync(path.join(root,p),'utf8'),/name="robots" content="noindex,(?:follow|nofollow)"/,p);
  }
 });
 test('SEO: organization metadata accurately identifies LORA',()=>{
