@@ -130,3 +130,7 @@ Public canonical host: `https://loraanimations.online`. A new `sitemap.xml` list
 After approval/production deployment: verify that https://loraanimations.online/sitemap.xml and https://loraanimations.online/robots.txt return 200; connect the domain in Google Search Console (DNS TXT verification for a domain property); submit sitemap.xml; use URL Inspection for key pages; inspect indexing, search queries and click-through rate. SEO metadata does not guarantee indexing, clicks or rankings. Do not claim Google registration has happened until confirmed in the Search Console property.
 
 Run `npm test` for existing tech-news and new SEO regression tests. This work does not change payment links, Netlify form POST behavior or Tidio chat code.
+
+
+## Dee's Bite Cakes case study (draft)
+Adds a dedicated video watch page at `/work/dees-bite-cakes/`, showcasing LORA's already-published real client commercial for a cake business. Includes a video embed, commercial service positioning, internal links, contact CTA and an updated XML sitemap. No unsupported client outcomes or testimonials are claimed. Review content and player before publishing. Existing Tidio, Flutterwave and Netlify contact flows remain untouched. Google indexing and video appearance are not guaranteed.

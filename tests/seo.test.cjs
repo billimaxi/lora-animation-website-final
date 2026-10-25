@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const root = path.join(__dirname, '..');
-const pagePaths = [{"file":"index.html","url":"/"},{"file":"services/index.html","url":"/services/"},{"file":"plans/index.html","url":"/plans/"},{"file":"work/index.html","url":"/work/"},{"file":"about/index.html","url":"/about/"},{"file":"contact/index.html","url":"/contact/"},{"file":"guides/index.html","url":"/guides/"},{"file":"faq/index.html","url":"/faq/"}];
+const pagePaths = [{"file":"index.html","url":"/"},{"file":"services/index.html","url":"/services/"},{"file":"plans/index.html","url":"/plans/"},{"file":"work/index.html","url":"/work/"},{"file":"work/dees-bite-cakes/index.html","url":"/work/dees-bite-cakes/"},{"file":"about/index.html","url":"/about/"},{"file":"contact/index.html","url":"/contact/"},{"file":"guides/index.html","url":"/guides/"},{"file":"faq/index.html","url":"/faq/"}];
 const base='https://loraanimations.online';
 test('SEO: unique descriptive titles, descriptions, canonical URLs and h1',()=>{
  const titles=new Set();
@@ -44,4 +44,15 @@ test('SEO: organization metadata accurately identifies LORA',()=>{
  assert.equal(org.url,base+'/');
  assert.equal(org.telephone,'+2349048200012');
  assert.ok(Array.isArray(org.sameAs));
+});
+
+test('Case study has a public video, internal CTA, Tidio and portfolio link',()=>{
+ const listing=fs.readFileSync(path.join(root,'work/index.html'),'utf8');
+ const html=fs.readFileSync(path.join(root,'work/dees-bite-cakes/index.html'),'utf8');
+ assert.ok(listing.includes('href="/work/dees-bite-cakes/"'));
+ assert.ok(html.includes('youtube.com/embed/n64X16gVrXE'));
+ assert.ok(html.includes('href="/contact/"'));
+ assert.ok(html.includes('href="/services/"'));
+ assert.ok(html.includes('code.tidio.co/9hmxhxqgu4ngeksux6hsezml5klhmyap.js'));
+ assert.ok(!html.includes('guaranteed sales'));
 });
