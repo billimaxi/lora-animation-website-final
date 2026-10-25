@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "test": "node --test tests/tech-news.test.cjs tests/seo.test.cjs",
-    "test:browser": "node tests/site.spec.cjs && node tests/tech-radar.spec.cjs && node tests/contact-form.spec.cjs && node tests/tidio-only.spec.cjs",
+    "test:browser": "node tests/site.spec.cjs && node tests/tech-radar.spec.cjs && node tests/contact-form.spec.cjs && node tests/tidio-only.spec.cjs && node tests/inline-videos.spec.cjs",
     "dev": "node tools/dev-server.cjs"
   },
   "engines": {

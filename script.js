@@ -20,6 +20,49 @@ document.querySelectorAll("[data-plan]").forEach(a=>a.addEventListener("click",(
   if(m && !m.value)m.value="I'd like to discuss the "+a.dataset.plan+" plan.";
 }));
 
+// Click-to-play portfolio reels: thumbnail first, YouTube iframe on explicit click.
+// External YouTube links remain available if an individual video cannot be embedded.
+(() => {
+  const triggers = document.querySelectorAll('.portfolio .portfolio-player > a[data-inline-video]');
+  if (!triggers.length) return;
+  let active = null;
+  const stopCurrent = (restoreFocus = false) => {
+    if (!active) return;
+    const { container, trigger } = active;
+    active = null;
+    container.replaceChildren(trigger); // Removing iframe also stops its audio.
+    if (restoreFocus) trigger.focus();
+  };
+  triggers.forEach(trigger => trigger.addEventListener('click', event => {
+    const id = trigger.dataset.inlineVideo || '';
+    // Never interpolate an unvalidated value into an external iframe URL.
+    if (!/^[a-zA-Z0-9_-]{11}$/.test(id)) return; // Native YouTube link still works.
+    event.preventDefault();
+    stopCurrent();
+
+    const container = trigger.parentElement;
+    const title = trigger.dataset.videoTitle || 'LORA Animations project';
+    const frame = document.createElement('iframe');
+    frame.src = 'https://www.youtube-nocookie.com/embed/' +
+      id + '?autoplay=1&rel=0&playsinline=1';
+    frame.title = title + ' — YouTube player';
+    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    frame.allowFullscreen = true;
+
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'portfolio-player-close';
+    close.setAttribute('aria-label', 'Stop playing ' + title);
+    close.textContent = '✕ Close';
+    close.addEventListener('click', () => stopCurrent(true));
+
+    active = { container, trigger };
+    container.replaceChildren(frame, close);
+    frame.focus();
+  }));
+})();
+
 const motionSlides=document.querySelectorAll(".motion-slide");
 const motionDots=document.querySelectorAll(".motion-dots span");
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
