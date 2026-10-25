@@ -122,3 +122,11 @@ In the Tidio account: **Settings > Live Chat > Appearance > Content**. Under **H
 If an automatic proactive message is desired when visitors land on the website (instead of only seeing the widget's Home/Chat content), use an optional Tidio Flow in its account. Configure just one welcome method; review Tidio's current flow entitlements.
 
 PR #2 is a review-only change. Existing pricing, About Us, framed founder, Tech Radar and Netlify contact form are unchanged.
+
+
+## Search discoverability / SEO foundations (review branch)
+Public canonical host: `https://loraanimations.online`. A new `sitemap.xml` lists eight principal, indexable landing pages; `robots.txt` announces the sitemap. Every page has a distinct, commercial-intent title and meta description, self-referencing canonical URL and social-sharing tags. Inner-page hero headings are semantic `h1` elements while preserving the design. The homepage contains Schema.org Organization and WebSite JSON-LD with factual contact and official social profiles. An older standalone /founder/ URL stays reachable but is marked noindex because founder information is on the homepage. Form-success and internal Netlify registration pages are noindex.
+
+After approval/production deployment: verify that https://loraanimations.online/sitemap.xml and https://loraanimations.online/robots.txt return 200; connect the domain in Google Search Console (DNS TXT verification for a domain property); submit sitemap.xml; use URL Inspection for key pages; inspect indexing, search queries and click-through rate. SEO metadata does not guarantee indexing, clicks or rankings. Do not claim Google registration has happened until confirmed in the Search Console property.
+
+Run `npm test` for existing tech-news and new SEO regression tests. This work does not change payment links, Netlify form POST behavior or Tidio chat code.
