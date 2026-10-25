@@ -177,3 +177,14 @@ form button:disabled{cursor:wait;opacity:.7}
  .case-links{flex-direction:column;align-items:stretch}
  .case-links>*{text-align:center}
 }
+
+/* Responsive, low-overhead inline playback for all four portfolio cards. */
+.portfolio-player{position:relative;width:100%;aspect-ratio:16 / 9;overflow:hidden;background:#171a16;border:1px solid #ffffff21}
+.portfolio-player>.thumb{width:100%;height:100%;aspect-ratio:auto}
+.portfolio-player>.thumb:focus-visible{outline:3px solid #f4c77c;outline-offset:-3px}
+.portfolio-player>.thumb img{display:block}
+.portfolio-play-caption{position:absolute;left:12px;bottom:10px;z-index:1;padding:5px 10px;background:#111c;border:1px solid #dfb65f88;color:#fff9ec;font:700 11px Manrope;letter-spacing:.02em;border-radius:4px;pointer-events:none}
+.portfolio-player>iframe{display:block;width:100%;height:100%;border:0;background:#151515}
+.portfolio-player-close{position:absolute;top:10px;right:10px;z-index:2;min-width:76px;min-height:44px;background:#111e;color:#fff;border:1px solid #e9bd65;border-radius:4px;cursor:pointer;font:700 12px Manrope}
+.portfolio-player-close:hover,.portfolio-player-close:focus-visible{background:#40331e}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
