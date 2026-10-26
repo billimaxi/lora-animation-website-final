@@ -56,3 +56,20 @@ test('Case study has a public video, internal CTA, Tidio and portfolio link',()=
  assert.ok(html.includes('code.tidio.co/9hmxhxqgu4ngeksux6hsezml5klhmyap.js'));
  assert.ok(!html.includes('guaranteed sales'));
 });
+
+test('LORA global positioning is exact and visible, with existing integrations preserved',()=>{
+ const tagline='LORA Animations — An African-born creative studio producing AI-powered video advertising, animation, and brand storytelling for businesses worldwide.';
+ for(const path of ['index.html','about/index.html']){
+  const html=fs.readFileSync(require('node:path').join(root,path),'utf8');
+  assert.ok(html.includes('<p class="lead">'+tagline+'</p>')||html.includes('<p class="lead small">'+tagline+'</p>'),path+' global positioning is in visible lead');
+  assert.ok(html.includes('name="description" content="'+tagline+'"'),path+' metadata global positioning');
+  assert.ok(html.includes('code.tidio.co/9hmxhxqgu4ngeksux6hsezml5klhmyap.js'),path+' Tidio retained');
+ }
+ const home=fs.readFileSync(require('node:path').join(root,'index.html'),'utf8');
+ assert.ok(home.includes('flutterwave.com/pay/bcocgfguehfr'),'Essential checkout retained');
+ assert.ok(home.includes('flutterwave.com/pay/ynkttbsoqk4d'),'Growth checkout retained');
+ assert.ok(home.includes('flutterwave.com/pay/aigfn8ttglc2'),'Studio checkout retained');
+ assert.ok(home.includes('data-inline-video="Sq4zTReSyBY"'),'portfolio player retained');
+ const contact=fs.readFileSync(require('node:path').join(root,'contact/index.html'),'utf8');
+ assert.ok(contact.includes('form name="lora-contact"'),'Netlify contact form retained');
+});
