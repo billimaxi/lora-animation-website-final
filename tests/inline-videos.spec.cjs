@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 const base = 'http://127.0.0.1:8000';
 const videos = {
+  'LORA Commercial 2': 'sJQlnyR9-so',
   'Africa In My Veins': 'Sq4zTReSyBY',
   'African Spirit Anthem': 'gXa3twObtzk',
   'Argungu Fishing Festival': 'XR8RzqfUVpk',
@@ -23,8 +24,9 @@ const videos = {
         ? route.continue() : route.abort());
       await page.goto(base+path);
       const gallery=page.locator('.portfolio');
-      assert.equal(await gallery.locator('.portfolio-player').count(),4);
+      assert.equal(await gallery.locator('.portfolio-player').count(),5);
       assert.equal(await gallery.locator('iframe').count(),0,'Do not preload players');
+      assert.equal(await gallery.locator('.portfolio-player--short').count(),1,'One portrait video in gallery');
       for(const [title,id] of Object.entries(videos)){
         const trigger=gallery.locator(`a[data-inline-video="${id}"]`);
         assert.equal(await trigger.count(),1);
@@ -54,7 +56,7 @@ const videos = {
           'No overflow at '+width+' for '+path);
       }
       const youtubeLinks=gallery.locator('a.worklink[href^="https://youtu.be/"]');
-      assert.equal(await youtubeLinks.count(),4,'Keep an external playback fallback');
+      assert.equal(await youtubeLinks.count(),5,'Keep an external playback fallback');
       assert.deepEqual(errors,[]);
       await page.close();
     }
