@@ -141,4 +141,4 @@ All four existing LORA work samples (Africa In My Veins, African Spirit Anthem, 
 
 
 ## Global positioning (draft review)
-The homepage and About page visibly use the founder-approved exact wording: “LORA Animations — An African-born creative studio producing AI-powered video advertising, animation, and brand storytelling for businesses worldwide.” The matching SEO, Open Graph and Twitter descriptions for these pages are updated, while Abuja remains identified as LORA’s location. No pricing, payment, client form, video or Tidio code changes are made. Publish only upon owner approval.
+The homepage and About page visibly use the founder-approved exact wording: “LORA Animations — An African-born creative studio producing AI-powered video advertising, animation, and brand storytelling for start-ups & businesses worldwide.” The matching SEO, Open Graph and Twitter descriptions for these pages are updated, while Abuja remains identified as LORA’s location. No pricing, payment, client form, video or Tidio code changes are made. Publish only upon owner approval.

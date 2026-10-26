@@ -58,11 +58,12 @@ test('Case study has a public video, internal CTA, Tidio and portfolio link',()=
 });
 
 test('LORA global positioning is exact and visible, with existing integrations preserved',()=>{
- const tagline='LORA Animations — An African-born creative studio producing AI-powered video advertising, animation, and brand storytelling for businesses worldwide.';
+ const tagline='LORA Animations — An African-born creative studio producing AI-powered video advertising, animation, and brand storytelling for start-ups & businesses worldwide.';
+ const encodedTagline=tagline.replaceAll('&','&amp;');
  for(const path of ['index.html','about/index.html']){
   const html=fs.readFileSync(require('node:path').join(root,path),'utf8');
-  assert.ok(html.includes('<p class="lead">'+tagline+'</p>')||html.includes('<p class="lead small">'+tagline+'</p>'),path+' global positioning is in visible lead');
-  assert.ok(html.includes('name="description" content="'+tagline+'"'),path+' metadata global positioning');
+  assert.ok(html.includes('<p class="lead">'+encodedTagline+'</p>')||html.includes('<p class="lead small">'+encodedTagline+'</p>'),path+' global positioning is in visible lead');
+  assert.ok(html.includes('name="description" content="'+encodedTagline+'"'),path+' metadata global positioning');
   assert.ok(html.includes('code.tidio.co/9hmxhxqgu4ngeksux6hsezml5klhmyap.js'),path+' Tidio retained');
  }
  const home=fs.readFileSync(require('node:path').join(root,'index.html'),'utf8');
