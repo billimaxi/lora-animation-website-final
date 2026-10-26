@@ -189,7 +189,5 @@ form button:disabled{cursor:wait;opacity:.7}
 .portfolio-player-close:hover,.portfolio-player-close:focus-visible{background:#40331e}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-/* LORA Commercial 2 is a portrait Short; the video is loaded only after Play. */
-.portfolio-player--short{aspect-ratio:9/16;max-width:300px;margin-inline:auto}
-.portfolio-player--short>.thumb img{object-fit:cover}
+/* New commercial uses the same widescreen dimensions as all portfolio projects. */
 .portfolio-new-commercial>small{color:#efc67a}

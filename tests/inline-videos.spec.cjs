@@ -26,7 +26,11 @@ const videos = {
       const gallery=page.locator('.portfolio');
       assert.equal(await gallery.locator('.portfolio-player').count(),5);
       assert.equal(await gallery.locator('iframe').count(),0,'Do not preload players');
-      assert.equal(await gallery.locator('.portfolio-player--short').count(),1,'One portrait video in gallery');
+      assert.equal(await gallery.locator('.portfolio-player--short').count(),0,'No portrait layout');
+      const cards=gallery.locator('.portfolio-player');
+      for(const card of await cards.all()){
+        assert.equal(await card.evaluate(el=>getComputedStyle(el).aspectRatio),'16 / 9','Widescreen portfolio card');
+      }
       for(const [title,id] of Object.entries(videos)){
         const trigger=gallery.locator(`a[data-inline-video="${id}"]`);
         assert.equal(await trigger.count(),1);
