@@ -107,7 +107,8 @@ form button:disabled{cursor:wait;opacity:.7}
 /* About Us page and the restored, elegantly framed homepage founder section. */
 #founder{scroll-margin-top:94px}
 .founder{border-top:1px solid rgba(220,178,93,.16)}
-.founder-inner{grid-template-columns:minmax(215px,300px) minmax(0,1fr);gap:clamp(30px,7vw,95px);max-width:1080px;justify-content:center}
+.founder-inner{grid-template-columns:minmax(0,1fr) minmax(215px,300px);gap:clamp(30px,6vw,75px);max-width:1080px;align-items:center;justify-items:stretch}
+.founder-copy{width:100%;max-width:700px}
 .founder-portrait{position:relative;margin:0;width:min(100%,285px);padding:9px 9px 0;border:1px solid rgba(220,178,93,.67);border-radius:14px;background:linear-gradient(145deg,#3c3626,#151712 72%);box-shadow:0 18px 55px rgba(0,0,0,.28),inset 0 0 0 3px rgba(255,255,255,.025)}
 .founder-portrait img{display:block;width:100%;height:auto;max-width:100%;max-height:340px;aspect-ratio:4/5;object-fit:cover;object-position:center 30%;border-radius:6px}
 .founder-portrait figcaption{text-align:center;padding:13px 4px 14px;color:#dcb25d;font:700 9px/1.4 Manrope;letter-spacing:.17em}
