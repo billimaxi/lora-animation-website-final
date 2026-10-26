@@ -142,3 +142,7 @@ All four existing LORA work samples (Africa In My Veins, African Spirit Anthem, 
 
 ## Global positioning (draft review)
 The homepage and About page visibly use the founder-approved exact wording: “LORA Animations — An African-born creative studio producing AI-powered video advertising, animation, and brand storytelling for start-ups & businesses worldwide.” The matching SEO, Open Graph and Twitter descriptions for these pages are updated, while Abuja remains identified as LORA’s location. No pricing, payment, client form, video or Tidio code changes are made. Publish only upon owner approval.
+
+
+## LORA Commercial 2 (published release notes)
+Adds the published regular YouTube commercial `https://youtu.be/sJQlnyR9-so` to the front of both homepage and Our Work portfolios with the existing lazy click-to-play behavior. Uses YouTube's static thumbnail (no MP4 downloaded with initial load) and the same 16:9 widescreen player as all other portfolio projects. Adds a direct contact CTA and keeps the original four projects. Includes a browser regression update for five videos. The video ID comes from the business owner's supplied YouTube link; watchability and embed permissions must be checked in the Netlify preview. No checkout, Tidio, Netlify Form, or SEO pages are changed. Publish only upon explicit owner approval.
