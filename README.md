@@ -138,3 +138,7 @@ Adds a dedicated video watch page at `/work/dees-bite-cakes/`, showcasing LORA's
 
 ## Inline video portfolio (draft review)
 All four existing LORA work samples (Africa In My Veins, African Spirit Anthem, Argungu Fishing Festival, Dee's Bite Cakes Ads) can be played *directly on the homepage and Our Work page* by selecting their thumbnail. A privacy-enhanced YouTube embed loads **only after the user clicks**; one video plays at a time to limit simultaneous audio and resources. The Close button stops playback and restores the preview. Direct YouTube watch links remain for fallback and for visitors who prefer YouTube; without JavaScript the thumbnails link to YouTube as before. The standalone Dee's Bite Cakes case study video is unchanged. The hover/thumbnail treatment fits the current brand and is responsive. Video hosting stays on YouTube, not Netlify. Run `npm run test:browser` with the existing dev server to exercise both galleries. Payment links, Netlify Forms, Tidio, SEO metadata, and sitemap are unchanged. Publish only with approval.
+
+
+## Global positioning (draft review)
+The homepage and About page visibly use the founder-approved exact wording: “LORA Animations — An African-born creative studio producing AI-powered video advertising, animation, and brand storytelling for start-ups & businesses worldwide.” The matching SEO, Open Graph and Twitter descriptions for these pages are updated, while Abuja remains identified as LORA’s location. No pricing, payment, client form, video or Tidio code changes are made. Publish only upon owner approval.
