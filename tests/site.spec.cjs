@@ -49,9 +49,12 @@ const { chromium } = require('playwright');
     assert.equal(await page.locator('.founder-portrait img').count(), 1);
     await page.goto('http://127.0.0.1:8000/contact/');
     const form = page.locator('form[name="lora-contact"]');
-    for (const [attribute, value] of Object.entries({ method: 'POST', 'data-netlify': 'true', 'netlify-honeypot': 'bot-field', action: '/success' })) {
+    for (const [attribute, value] of Object.entries({ method: 'POST', action: '/success' })) {
       assert.equal(await form.getAttribute(attribute), value);
     }
+    // Netlify detection moved to the static registration form on current main.
+    const registration = await (await page.request.get('http://127.0.0.1:8000/__forms.html')).text();
+    assert.match(registration, /<form name="lora-contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">/);
     assert.equal(await form.locator('[name="form-name"]').inputValue(), 'lora-contact');
     assert.equal(await form.locator('[name="bot-field"]').count(), 1);
     assert.equal(await form.evaluate(el => el.checkValidity()), false);
