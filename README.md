@@ -146,3 +146,10 @@ The homepage and About page visibly use the founder-approved exact wording: “L
 
 ## LORA Commercial 2 (published release notes)
 Adds the published regular YouTube commercial `https://youtu.be/sJQlnyR9-so` to the front of both homepage and Our Work portfolios with the existing lazy click-to-play behavior. Uses YouTube's static thumbnail (no MP4 downloaded with initial load) and the same 16:9 widescreen player as all other portfolio projects. Adds a direct contact CTA and keeps the original four projects. Includes a browser regression update for five videos. The video ID comes from the business owner's supplied YouTube link; watchability and embed permissions must be checked in the Netlify preview. No checkout, Tidio, Netlify Form, or SEO pages are changed. Publish only upon explicit owner approval.
+
+## LORA AI Studio
+The additive `/studio/` page provides three server-backed AI assistants and a
+free project brief builder. It reuses the existing Tidio chat and contact form.
+See [installation, runtime and test notes](docs/lora-ai-studio.md). The existing
+Netlify Functions `OPENAI_API_KEY` stays server-side; no key is bundled with the
+website. Live provider verification requires an authorized Netlify preview.

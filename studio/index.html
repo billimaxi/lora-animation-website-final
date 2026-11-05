@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="LORA AI Studio: explore video advertising ideas, develop a creative brief and learn about AI-powered animation. Speak to LORA about your project.">
+<title>AI Studio & Creative Brief Builder | LORA Animations</title>
+<link rel="canonical" href="https://loraanimations.online/studio/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/studio/studio.css">
+</head>
+<body>
+<header><a class="brand" href="/" aria-label="LORA Animations home"><img src="/assets/lora-logo.jpeg" alt="LORA Animations"></a><button class="menu-toggle" aria-label="Menu" aria-controls="main-nav" aria-expanded="false">☰</button><nav id="main-nav"><a href="/">Home</a><a href="/services/">Services</a><a href="/plans/">Plans</a><a href="/work/">Our Work</a><a href="/about/">About Us</a><a href="/guides/">Guides</a><a href="/faq/">FAQ</a><a href="/studio/" aria-current="page">AI Studio</a><a class="navbtn" href="/contact/">Let's Talk</a></nav></header>
+<main class="studio-page">
+<section class="section studio-intro" aria-labelledby="studio-heading">
+  <p class="eyebrow">LORA ANIMATIONS / CREATIVE INTELLIGENCE</p>
+  <h1 id="studio-heading">Your next idea, <em>made clearer.</em></h1>
+  <p class="lead">Explore an ad concept, shape a production brief, or learn how creative AI video works. These assistants offer preliminary guidance—our team makes the final production decisions.</p>
+  <div class="studio-meta"><span>✦ Three specialist assistants</span><span>✦ Free creative brief builder</span><span>✦ Human assistance via Tidio</span></div>
+</section>
+<section class="section studio-workspace" aria-labelledby="workspace-heading">
+  <div class="studio-heading-row"><div><p class="eyebrow">STEP 01 / CHOOSE YOUR GUIDE</p><h2 id="workspace-heading">LORA AI <em>Assistants.</em></h2></div><span class="studio-status" id="studio-status" role="status" aria-live="polite">Checking AI availability…</span></div>
+  <div class="studio-mode-grid" role="group" aria-label="Choose an AI assistant">
+    <button type="button" class="studio-mode active" data-mode="brand" aria-pressed="true"><span class="studio-mode-icon" aria-hidden="true">↗</span><strong>Brand Ad Adviser</strong><span>Find the right idea for your business.</span></button>
+    <button type="button" class="studio-mode" data-mode="brief" aria-pressed="false"><span class="studio-mode-icon" aria-hidden="true">✳</span><strong>Creative Brief Assistant</strong><span>Turn an idea into a practical project plan.</span></button>
+    <button type="button" class="studio-mode" data-mode="learn" aria-pressed="false"><span class="studio-mode-icon" aria-hidden="true">◈</span><strong>AI Video Learning Coach</strong><span>Learn creative video production step by step.</span></button>
+  </div>
+  <div class="studio-chat-panel">
+    <div class="studio-chat-header"><div><b id="active-mode-name">Brand Ad Adviser</b><small>AI-generated guidance · Not a binding quotation</small></div><button type="button" id="chat-clear" class="studio-text-button">Clear conversation</button></div>
+    <div class="studio-messages" id="studio-messages" role="log" aria-label="Assistant conversation" aria-live="polite" aria-relevant="additions text">
+      <div class="studio-message assistant"><strong>LORA AI</strong><p>Hello! Tell me about your business and what you want your video to achieve. I can suggest a practical concept.</p></div>
+    </div>
+    <div class="studio-examples" id="studio-examples" aria-label="Example questions"><button type="button" data-question="Suggest a 20-second Instagram ad for a small skincare brand.">Skincare ad idea</button><button type="button" data-question="What should a startup include in a brand introduction video?">Startup introduction</button></div>
+    <form id="studio-chat-form" class="studio-chat-form"><label for="studio-question">Your question</label><textarea id="studio-question" maxlength="1400" rows="3" placeholder="Tell us what you're creating, selling or trying to explain…" required></textarea><div class="studio-chat-actions"><span>Questions and recent conversation are sent to OpenAI for AI-generated guidance, not human support. Do not share passwords, private records or payment details.</span><button class="btn" type="submit" id="studio-send">Ask LORA AI ↗</button></div></form>
+    <p class="studio-chat-feedback" id="studio-feedback" role="status" aria-live="polite" hidden></p>
+  </div>
+</section>
+<section class="section studio-builder" aria-labelledby="builder-heading">
+  <div class="studio-heading-row"><div><p class="eyebrow">STEP 02 / GET PROJECT READY</p><h2 id="builder-heading">Build your <em>creative brief.</em></h2><p class="studio-builder-lead">No AI account required. Generate a ready-to-share brief and take it to LORA's existing enquiry form.</p></div></div>
+  <div class="studio-builder-grid">
+    <form id="brief-form" class="studio-brief-form" novalidate>
+      <label for="brief-brand">Business / project name<input id="brief-brand" name="brand" maxlength="100" placeholder="e.g. Your brand name"></label>
+      <label for="brief-goal">What do you want to achieve?<select id="brief-goal" name="goal"><option value="Introduce a brand">Introduce a brand</option><option value="Promote a product">Promote a product</option><option value="Announce a launch">Announce a launch</option><option value="Explain a service">Explain a service</option><option value="Tell a story">Tell a story</option></select></label>
+      <label for="brief-audience">Who is your audience?<input id="brief-audience" name="audience" maxlength="170" placeholder="e.g. young skincare customers"></label>
+      <label for="brief-message">What's your main message?<textarea id="brief-message" name="message" maxlength="550" rows="3" placeholder="What should viewers remember?"></textarea></label>
+      <label for="brief-video">Video type<select id="brief-video" name="video"><option value="AI animated advert">AI animated advert</option><option value="Product commercial">Product commercial</option><option value="Brand explainer">Brand explainer</option><option value="Music video visuals">Music video visuals</option><option value="Cultural storytelling">Cultural storytelling</option><option value="Not sure yet">Not sure yet</option></select></label>
+      <label for="brief-platform">Where will it appear?<select id="brief-platform" name="platform"><option value="Instagram / TikTok">Instagram / TikTok</option><option value="YouTube">YouTube</option><option value="Facebook">Facebook</option><option value="Website">Website</option><option value="Multiple platforms">Multiple platforms</option></select></label>
+      <label for="brief-style">Preferred style<input id="brief-style" name="style" maxlength="140" placeholder="e.g. Afrofuturistic cinematic, funny, elegant"></label>
+      <label for="brief-cta">Call to action<input id="brief-cta" name="cta" maxlength="140" placeholder="e.g. Visit the store, send a DM"></label>
+      <label for="brief-deadline">Ideal date / timeline<input id="brief-deadline" name="deadline" maxlength="100" placeholder="e.g. Within three weeks"></label>
+      <div class="studio-brief-actions"><button type="button" class="btn" id="brief-generate">Generate brief ↗</button><button type="reset" class="studio-text-button">Reset</button></div>
+    </form>
+    <div class="studio-brief-preview"><div class="studio-preview-top"><b>YOUR CREATIVE BRIEF</b><span>PRELIMINARY / NOT SUBMITTED</span></div><pre id="brief-preview" aria-live="polite">Fill in the fields and select “Generate brief” to see your draft here.</pre><div class="studio-brief-actions"><button type="button" id="brief-copy" class="studio-text-button" disabled>Copy brief</button><button type="button" id="brief-contact" class="btn" disabled>Continue to enquiry form ↗</button></div><p id="brief-feedback" class="studio-brief-feedback" aria-live="polite"></p><small>The brief stays in your browser until you choose to send an inquiry. LORA has not received it yet.</small></div>
+  </div>
+</section>
+<section class="section studio-next"><p class="eyebrow">READY FOR A REAL PRODUCTION?</p><h2>Let's make it <em>real.</em></h2><p>Ask our team about the scope, price and production schedule. Prefer a human conversation? Use the site's live chat.</p><a class="btn" href="/contact/">Contact LORA Animations ↗</a> <a class="plain" href="/plans/">Explore monthly plans ↗</a></section>
+</main>
+<footer><a class="brand" href="/" aria-label="LORA Animations home"><img src="/assets/lora-logo.jpeg" alt="LORA Animations"></a><p>Visuals That Help Businesses Grow.</p><small>© <span id="year"></span> LORA Animation · Abuja, Nigeria</small></footer>
+<script src="/script.js"></script><script defer src="/studio/studio.js"></script><script src="https://code.tidio.co/9hmxhxqgu4ngeksux6hsezml5klhmyap.js" async></script>
+</body></html>

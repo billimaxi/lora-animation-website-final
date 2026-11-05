@@ -22,7 +22,7 @@ const tidio='https://code.tidio.co/9hmxhxqgu4ngeksux6hsezml5klhmyap.js';
       if(route.request().url().startsWith(base))return route.continue();
       return route.abort();
     });
-    for(const path of ['/','/about/','/contact/']){
+    for(const path of ['/','/about/','/contact/','/studio/']){
       await page.goto(base+path);
       await page.waitForFunction(()=>window.__tidioCalls?.includes('show'));
       assert.equal(await page.locator('#lora-assistant, .assistant-toggle').count(),0);
